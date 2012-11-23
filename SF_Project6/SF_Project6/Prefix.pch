@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'SF_Project6' target in the 'SF_Project6' project
+//
+
+#ifdef __OBJC__
+	#import <Foundation/Foundation.h>
+	#import <UIKit/UIKit.h>
+#endif
