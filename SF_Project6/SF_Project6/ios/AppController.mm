@@ -39,7 +39,7 @@ static AppDelegate s_sharedApplication;
     viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
     viewController.wantsFullScreenLayout = YES;
     viewController.view = __glView;
-
+    
     // Set RootViewController to window
     [window addSubview: viewController.view];
     [window makeKeyAndVisible];

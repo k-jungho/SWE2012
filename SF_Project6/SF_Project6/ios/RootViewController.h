@@ -24,10 +24,20 @@
  ****************************************************************************/
 
 #import <UIKit/UIKit.h>
+#import <GameKit/GameKit.h>
 
 
-@interface RootViewController : UIViewController {
-
+@interface RootViewController : UIViewController <GKSessionDelegate, GKPeerPickerControllerDelegate>
+{
+    GKSession *fartSession;
+    GKPeerPickerController *fartPicker;
+    NSMutableArray *fartPeers;
 }
+
+@property (retain) GKSession *fartSession;
+
+- (void) connectToPeers:(id) sender;
+- (void) sendALoudFart:(id) sender;
+- (void) sendASilentAssassin:(id) sender;
 
 @end
