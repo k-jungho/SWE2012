@@ -73,6 +73,9 @@ public:
     float count_frame;
     //체력바
     void Draw_HPbar();
+    
+private:
+    float prev_elapsedTime;
 };
 
 #endif

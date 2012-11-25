@@ -163,8 +163,16 @@ void SF_Scene::frame(float dt)
     
     //턴을 넘기는 부분
     count_frame+=dt;
+    
+    if(present_turn == player_num && count_frame - prev_elapsedTime >= 0.1)
+    {
+        prev_elapsedTime = count_frame;
+//        ~~.sendpacket(0, ~~);
+    }
+    
     if(present_turn==1 || present_turn==2){
         if(count_frame >= 10){
+            
             if(present_turn==1){
                 count_frame=0;
                 present_turn=-1;
@@ -174,18 +182,17 @@ void SF_Scene::frame(float dt)
             }
         }
     }else if(present_turn==-1 || present_turn==-2){
-        if(count_frame >=1){
-            if(present_turn==-1){
-                Enemy.Set_velocity(0, 0);
-                Fighter.Set_velocity(0, 0);
-                count_frame=0;
-                present_turn=2;
-            }else if(present_turn==-2){
-                Enemy.Set_velocity(0, 0);
-                Fighter.Set_velocity(0, 0);
-                count_frame=0;
-                present_turn=1;
+        if(count_frame >=1){//나중에 상대방 시작패킷 받으면 시작하는걸로 바꿔
+            present_turn += 3;
+            Enemy.Set_velocity(0, 0);
+            Fighter.Set_velocity(0, 0);
+            
+            if(present_turn == player_num)
+            {
+                //~~.sendpacket(4, ~~);
             }
+            count_frame = 0;
+            prev_elapsedTime = 0;
         }
     }
 }
