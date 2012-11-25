@@ -12,9 +12,9 @@
 
 - (void)AnalyzeReceivedPacket:(NSData*) packet
 {
-    unsigned char* buffer = (unsigned char*) [packet bytes];
+    Byte* buffer = (Byte*) [packet bytes];
     
-    unsigned char flag = buffer[0];
+    Byte flag = buffer[0];
     
     //move enemy to new position
     
@@ -34,8 +34,8 @@
 
 - (NSData*) MakePacket:(int) flag:(SF_vector) position:(SF_vector) velocity
 {
-    unsigned char buffer[34];
-    buffer[0] = (unsigned char)flag;
+    Byte buffer[34];
+    buffer[0] = (Byte)flag;
     
     memcpy(buffer+1, &position, sizeof(SF_vector));
     memcpy(buffer+1+sizeof(SF_vector), &velocity, sizeof(SF_vector));
