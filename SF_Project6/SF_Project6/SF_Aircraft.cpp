@@ -78,3 +78,7 @@ void SF_Aircraft::Set_angle(double y){
 int SF_Aircraft::Get_HP(){
     return HP;
 }
+
+void SF_Aircraft::Sub_HP(int demage){
+    HP-=demage;
+}

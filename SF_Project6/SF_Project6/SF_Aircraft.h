@@ -28,6 +28,7 @@ public:
     void Set_velocity(double x, double y);
     void Add_angle(double x);
     void Aircraft_Move(cocos2d::CCSize winSize);
+    void Sub_HP(int demage);
     double Get_angle();
     int Get_HP();
 };

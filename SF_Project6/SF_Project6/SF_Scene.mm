@@ -256,6 +256,15 @@ void SF_Scene::menuShootCallback(CCObject* pSender) //버튼 입력시 미사일
         pMissile->setScaleY(0.5);
         this->addChild(pMissile,1);
         check_shoot=true;
+        
+        CCSize minimap_size = pMiniMap->getContentSize();
+        CCPoint minimap_position = pMiniMap->getPosition();
+        SF_vector Missile_pos = Missile.Get_position();
+        
+        char c[32];
+        sprintf( c, "%f %f", minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,minimap_position.y-40);
+        pLabel->setString(c);
+        pLabel->setPosition( ccp(winSize.width / 2, winSize.height - 20) );
     }
 }
 
@@ -318,6 +327,8 @@ void SF_Scene::setting_scene(){
     pReddot->setOpacity(180);
     pYellowdot=CCSprite::spriteWithFile("Yellow_dot.png");
     pYellowdot->setOpacity(180);
+    pYellowdot->setPosition(ccp(winSize.width/2,winSize.height/2));
+    this->addChild(pYellowdot, 2);
     
     if(player_num==1){
         pGreendot->setPosition(ccp(Minimap_position.x-Minimap_size.width/4,(Minimap_position.y-40)));
@@ -455,7 +466,6 @@ void SF_Scene::MiniMap_dot(){
     if(check_shoot==true){
         SF_vector Missile_pos = Missile.Get_position();
         //pYellowdot->setPosition(ccp(minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
-        //this->addChild(pYellowdot,2);
     }
 }
 
@@ -466,11 +476,6 @@ void SF_Scene::Draw_HPbar(){
     Enemy_HP = Enemy.Get_HP();
     fighter_pos=Fighter.Get_position();
     enemy_pos=Enemy.Get_position();
-    
-    char c[32];
-    sprintf( c, "%d %d", Fighter_HP,Enemy_HP);
-    pLabel->setString(c);
-    pLabel->setPosition( ccp(winSize.width / 2, winSize.height - 20) );
     
     pFighter_HPbar->setScaleX((float)Fighter_HP/1000);
     pFighter_HPbar->setPosition(ccp(fighter_pos.x-Layer_operator,fighter_pos.y-70));
