@@ -10,32 +10,40 @@
 
 @implementation PacketManager
 
-- (void) SetPlayerNumber:(int)pNum
+- (void)AnalyzeReceivedPacket:(NSData*) packet
 {
-    m_playerNum = pNum;
-    m_enemyNum = 3 - m_playerNum;
-}
-
-- (void)AnalyzeReceivedPacket:(char[]) packet
-{
-    unsigned char flag = packet[0];
+    unsigned char* buffer = (unsigned char*) [packet bytes];
+    
+    unsigned char flag = buffer[0];
+    
+    //move enemy to new position
     
     switch (flag) {
         case START:
             //timer start
             break;
-        case END:
-            //timer end
-            break;
-        case MOVE:
-            //move enemy to new position
-            break;
         case SHOT:
             //give velocity, draw missile
+        case END:
+            //timer end
             break;
         default:
             break;
     }
+}
+
+- (NSData*) MakePacket:(int) flag:(SF_vector) position:(SF_vector) velocity
+{
+    unsigned char buffer[34];
+    buffer[0] = (unsigned char)flag;
+    
+    memcpy(buffer+1, &position, sizeof(SF_vector));
+    memcpy(buffer+1+sizeof(SF_vector), &velocity, sizeof(SF_vector));
+    
+    NSData* packet = [NSData dataWithBytes:buffer length:sizeof(buffer)];
+    [packet getBytes:buffer];
+    
+    return packet;
 }
 
 @end

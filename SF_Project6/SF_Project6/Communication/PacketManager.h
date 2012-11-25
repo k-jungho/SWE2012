@@ -9,21 +9,17 @@
 #import <Foundation/Foundation.h>
 #import "SF_Object.h"
 
-
-#define START   1<<7
-#define END     1<<6
-#define MOVE    1<<5
-#define SHOT    1<<4
+#define START   4
+#define END     2
+#define SHOT    1
 
 @interface PacketManager : NSObject
 {
-    int m_playerNum;
-    int m_enemyNum;
     
 }
 
-- (void) SetPlayerNumber:(int) pNum;
-- (void) AnalyzeReceivedPacket:(char[]) packet;
+- (void) AnalyzeReceivedPacket:(NSData*) packet;
 
+- (NSData*) MakePacket:(int) flag:(SF_vector) position:(SF_vector) velocity;
 
 @end
