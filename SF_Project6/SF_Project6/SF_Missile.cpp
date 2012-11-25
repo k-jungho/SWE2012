@@ -9,8 +9,8 @@
 #include <iostream>
 #include "SF_Missile.h"
 
-void SF_Missile::Init_Missile(double x, double y, SF_vector Shoot_angle, int power){
-    SF_Object::Init_Object(x, y);
+void SF_Missile::Init_Missile(SF_vector Shoot_pos, SF_vector Shoot_angle, int power){
+    SF_Object::Init_Object(Shoot_pos.x, Shoot_pos.y);
     SF_Missile::velocity.x=Shoot_angle.x;
     SF_Missile::velocity.y=Shoot_angle.y;
     SF_Missile::power=power;

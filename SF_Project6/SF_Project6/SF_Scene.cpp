@@ -136,12 +136,12 @@ void SF_Scene::frame(float dt)
 
 void SF_Scene::didAccelerate(CCAcceleration* pAccelerationValue)
 {
-    Fighter.Add_velocity(pAccelerationValue->x,0 );
-    
     if(player_num==1){
+        Fighter.Add_velocity(pAccelerationValue->x,0 );
         Fighter.Add_angle(pAccelerationValue->y);
     }
-    else{
+    else if(player_num==2){
+        Enemy.Add_velocity(pAccelerationValue->x,0 );
         Enemy.Add_angle(-(pAccelerationValue->y));
     }
 }
@@ -153,14 +153,12 @@ void SF_Scene::menuShootCallback(CCObject* pSender) //버튼 입력시 미사일
     present_position=Fighter.Get_position();
     present_angle=Fighter.Get_angle();
     
-    double Shoot_power;
-    Shoot_power=10+Get_Powerposition()/4;
-    //Shoot_angle.x=20*cos(present_angle);
-    Shoot_angle.x=20;
+    double Shoot_power = Get_Powerposition();
+    Shoot_angle.x=Shoot_power*cos(present_angle);
     Shoot_angle.y=Shoot_power*sin(present_angle);
     
     N_Missile[Missile_count].Missile=CCSprite::spriteWithFile("bullet.png");
-    N_Missile[Missile_count].Missile_class.Init_Missile(present_position.x, present_position.y,Shoot_angle,1);
+    N_Missile[Missile_count].Missile_class.Init_Missile(present_position,Shoot_angle,1);
     N_Missile[Missile_count].Missile->setPosition(ccp(present_position.x,present_position.y));
     N_Missile[Missile_count].enable=true;
     this->addChild(N_Missile[Missile_count].Missile,1);
@@ -321,7 +319,7 @@ double SF_Scene::Get_Powerposition(){
     
     bar_x_position=pCheckbar->getPosition().x;
     
-    return bar_x_position/290*100;
+    return (bar_x_position-80)/290*100;
 }
 
 void SF_Scene::MiniMap_dot(){
@@ -338,10 +336,10 @@ void SF_Scene::MiniMap_dot(){
     pLabel->setPosition( ccp(winSize.width / 2, winSize.height - 20) );
     
     if(player_num == 1){
-        pGreendot->setPosition(ccp(minimap_position.x-minimap_size.width/2+P1_position.x/winSize.width*100*minimap_size.width,(minimap_position.y-40)));
-        pReddot->setPosition(ccp(minimap_position.x-minimap_size.width/2,(minimap_position.y-40)));
+        pGreendot->setPosition(ccp(minimap_position.x-minimap_size.width/2+P1_position.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
+        pReddot->setPosition(ccp(minimap_position.x-minimap_size.width/2+P2_position.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
     }else if(player_num == 2){
-        
+        pGreendot->setPosition(ccp(minimap_position.x-minimap_size.width/2+P2_position.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
+        pReddot->setPosition(ccp(minimap_position.x-minimap_size.width/2+P1_position.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
     }
-    minimap_position.x-minimap_size.width/2+P1_position.x/winSize.width*100*minimap_size.width;
 }
