@@ -16,6 +16,8 @@
 
 @implementation AppController
 
+RootViewController* pRootViewController = NULL;
+
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -41,6 +43,8 @@ static AppDelegate s_sharedApplication;
     viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
     viewController.wantsFullScreenLayout = YES;
     viewController.view = __glView;
+    
+    pRootViewController = viewController;
     
     // Set RootViewController to window
     [window addSubview: viewController.view];
