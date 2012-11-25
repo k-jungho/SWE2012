@@ -8,12 +8,6 @@
 
 #define MAX_SHOOT_POWER 40
 
-typedef struct Missile_struct{
-    cocos2d::CCSprite *Missile;                                        //이미지
-    SF_Missile Missile_class;                                          //미사일 클래
-    bool enable=false;
-}Missile_struct;
-
 class SF_Scene: public cocos2d::CCLayer
 {
 public:
@@ -53,12 +47,16 @@ public:
     cocos2d::CCSprite* pCheckbar;
     cocos2d::CCSprite* pGreendot;
     cocos2d::CCSprite* pReddot;
+    cocos2d::CCSprite* pYellowdot;
     
     int player_num;
     int present_turn;
     int Layer_operator;
-    int Missile_count,Missile_base;
-    Missile_struct N_Missile[255];                                      //대기중인 노드
+    
+    //미사일 관련
+    cocos2d::CCSprite* pMissile;
+    SF_Missile Missile;
+    bool check_shoot;
     
     virtual void didAccelerate(cocos2d::CCAcceleration* pAccelerationValue);
     void setting_scene();
@@ -73,6 +71,7 @@ public:
     float count_frame;
     //체력바
     void Draw_HPbar();
+    void Write_Time();
     
 private:
     float prev_elapsedTime;

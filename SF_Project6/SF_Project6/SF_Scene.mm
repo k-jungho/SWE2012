@@ -90,7 +90,7 @@ void SF_Scene::frame(float dt)
     Fighter_position=Fighter.Get_position();
     Enemy_position=Enemy.Get_position();
     
-    if(present_turn==1 || present_turn==-1){
+    if(present_turn==1){
         //비행기 포지션에 따른 레이어 재배치
         if(Fighter_position.x>=winSize.width){
             Layer_operator=winSize.width;
@@ -104,7 +104,7 @@ void SF_Scene::frame(float dt)
         }else if(player_num==2){
             
         }
-    }else if(present_turn==2 || present_turn==-2){
+    }else if(present_turn==2){
         //비행기 포지션에 따른 레이어 재배치
         if(Enemy_position.x>=winSize.width){
             Layer_operator=winSize.width;
@@ -119,6 +119,14 @@ void SF_Scene::frame(float dt)
             Move_Powerbar();
         }
     }
+    //포탄에 따라 레이어를 한번 더 추가로 변경
+    if(check_shoot==true){
+        if(Missile.Get_position().x >= winSize.width){
+            Layer_operator=winSize.width;
+        }else{
+            Layer_operator=0;
+        }
+    }
     //미니맵을 움직임
     MiniMap_dot();
     //HP그리기
@@ -128,23 +136,27 @@ void SF_Scene::frame(float dt)
     pEnemy->setPosition(ccp(Enemy_position.x-Layer_operator,Enemy_position.y));
     //////////////////////////////////////////////////////////////////////////////
     //미사일을 움직임
-    for(int i=0; i<255; i++){
-        if(N_Missile[i].enable==true){
-            N_Missile[i].Missile_class.Missile_Move(winSize);
-            Missile_position=N_Missile[i].Missile_class.Get_position();
-            N_Missile[i].Missile->setPosition(ccp(Missile_position.x-Layer_operator,Missile_position.y));
+    if(check_shoot==true){
+        Missile.Missile_Move(winSize);
+        Missile_position=Missile.Get_position();
+        pMissile->setPosition(ccp(Missile_position.x-Layer_operator,Missile_position.y));
+        
+        if(Missile.Check_EndMissile(winSize)){
+            this->removeChild(pMissile,true);
+            count_frame=0;
+            check_shoot=false;
+            //this->removeChild(pYellowdot, true);
+            if(present_turn==1)
+                present_turn=-1;
+            else if(present_turn==2)
+                present_turn=-2;
         }
+//    if( CCRect::CCRectIntersectsRect(pMissile->boundingBox(), pEnemy->boundingBox()) )
+//    {
+//        
+//    }
     }
-    
-    for(int j=0; j<255; j++){
-        if(N_Missile[j].enable==true){
-            if(N_Missile[j].Missile_class.Check_EndMissile(winSize)){
-                this->removeChild(N_Missile[j].Missile, true);
-                N_Missile[j].enable=false;
-            }
-        }
-    }
-    
+
     //각도 표시부
     double player_angle;
     SF_vector arrow_position;
@@ -161,18 +173,20 @@ void SF_Scene::frame(float dt)
     pArrow->setPosition(ccp(arrow_position.x-Layer_operator,arrow_position.y));
     pArrow->setRotation(90-player_angle*180/PI);
     
+    //남은 시간 표수 부분
+    Write_Time();
+    
     //턴을 넘기는 부분
     count_frame+=dt;
     
     if(present_turn == player_num && count_frame - prev_elapsedTime >= 0.1)
     {
         prev_elapsedTime = count_frame;
-//        ~~.sendpacket(0, ~~);
+        //        ~~.sendpacket(0, ~~);
     }
     
     if(present_turn==1 || present_turn==2){
         if(count_frame >= 10){
-            
             if(present_turn==1){
                 count_frame=0;
                 present_turn=-1;
@@ -192,6 +206,7 @@ void SF_Scene::frame(float dt)
                 //~~.sendpacket(4, ~~);
             }
             count_frame = 0;
+            check_shoot=false;
             prev_elapsedTime = 0;
         }
     }
@@ -214,36 +229,34 @@ void SF_Scene::didAccelerate(CCAcceleration* pAccelerationValue)
 
 void SF_Scene::menuShootCallback(CCObject* pSender) //버튼 입력시 미사일 발사
 {
-    SF_vector present_position, Shoot_angle;
-    double present_angle;
-    double Shoot_power = Get_Powerposition();
+    if(check_shoot==false){
+        SF_vector present_position, Shoot_angle;
+        double present_angle;
+        double Shoot_power = Get_Powerposition();
     
-    if(present_turn==1){
-        if(player_num==1){
-            present_position=Fighter.Get_position();
-            present_angle=Fighter.Get_angle();
+        if(present_turn==1){
+            if(player_num==1){
+                    present_position=Fighter.Get_position();
+                present_angle=Fighter.Get_angle();
+            }
+        }else if(present_turn==2){
+            if(player_num==2){
+                present_position=Enemy.Get_position();
+                present_angle=Enemy.Get_angle();
+            }
         }
-    }else if(present_turn==2){
-        if(player_num==2){
-            present_position=Enemy.Get_position();
-            present_angle=Enemy.Get_angle();
-        }
+        Shoot_power=20+Shoot_power/2;
+        Shoot_angle.x=Shoot_power*cos(present_angle);
+        Shoot_angle.y=Shoot_power*sin(present_angle);
+    
+        pMissile=CCSprite::spriteWithFile("Bomb.png");
+        Missile.Init_Missile(present_position,Shoot_angle,1);
+        pMissile->setPosition(ccp(present_position.x,present_position.y));
+        pMissile->setScaleX(0.5);
+        pMissile->setScaleY(0.5);
+        this->addChild(pMissile,1);
+        check_shoot=true;
     }
-    Shoot_power=20+Shoot_power/2;
-    Shoot_angle.x=Shoot_power*cos(present_angle);
-    Shoot_angle.y=Shoot_power*sin(present_angle);
-    
-    N_Missile[Missile_count].Missile=CCSprite::spriteWithFile("Bomb.png");
-    N_Missile[Missile_count].Missile_class.Init_Missile(present_position,Shoot_angle,1);
-    N_Missile[Missile_count].Missile->setPosition(ccp(present_position.x,present_position.y));
-    N_Missile[Missile_count].Missile->setScaleX(0.5);
-    N_Missile[Missile_count].Missile->setScaleY(0.5);
-    N_Missile[Missile_count].enable=true;
-    this->addChild(N_Missile[Missile_count].Missile,1);
-    Missile_count++;
-    
-    if(Missile_count==255)
-        Missile_count=0;
 }
 
 void SF_Scene::select1(CCObject* pSender){
@@ -303,6 +316,8 @@ void SF_Scene::setting_scene(){
     pGreendot->setOpacity(180);
     pReddot=CCSprite::spriteWithFile("red_dot.png");
     pReddot->setOpacity(180);
+    pYellowdot=CCSprite::spriteWithFile("Yellow_dot.png");
+    pYellowdot->setOpacity(180);
     
     if(player_num==1){
         pGreendot->setPosition(ccp(Minimap_position.x-Minimap_size.width/4,(Minimap_position.y-40)));
@@ -354,7 +369,7 @@ void SF_Scene::setting_scene(){
     
     //타이머 등록
     char a[32];
-    pTimer = CCLabelTTF::labelWithString("Time", "Arial", 34);
+    pTimer = CCLabelTTF::labelWithString("Time", "Arial", 40);
     sprintf( a, "TIME");
     pTimer->setString(a);
     pTimer->setPosition(ccp(winSize.width-40,20));
@@ -382,11 +397,10 @@ void SF_Scene::setting_scene(){
     pCheckbar->setPosition( ccp(200-120,winSize.height-60));
     this->addChild(pCheckbar,1);
     
-    //미사일 초기화
-    Missile_count=0;
-    Missile_base=0;
     //프레임 수를 세기 위해 초기화
     count_frame=0;
+    //미사일 발사 여부 초기화
+    check_shoot=false;
     
     setIsAccelerometerEnabled(true);
     
@@ -437,6 +451,12 @@ void SF_Scene::MiniMap_dot(){
         pGreendot->setPosition(ccp(minimap_position.x-minimap_size.width/2+P2_position.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
         pReddot->setPosition(ccp(minimap_position.x-minimap_size.width/2+P1_position.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
     }
+    
+    if(check_shoot==true){
+        SF_vector Missile_pos = Missile.Get_position();
+        //pYellowdot->setPosition(ccp(minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
+        //this->addChild(pYellowdot,2);
+    }
 }
 
 void SF_Scene::Draw_HPbar(){
@@ -456,4 +476,16 @@ void SF_Scene::Draw_HPbar(){
     pFighter_HPbar->setPosition(ccp(fighter_pos.x-Layer_operator,fighter_pos.y-70));
     pEnemy_HPbar->setScaleX((float)Enemy_HP/1000);
     pEnemy_HPbar->setPosition(ccp(enemy_pos.x-Layer_operator,enemy_pos.y-70));
+}
+
+void SF_Scene::Write_Time(){
+    if(present_turn==1 || present_turn==2){
+        int temp;
+        char c[32];
+        temp=10-(int)count_frame;
+        sprintf(c,"%d",temp);
+        pTimer->setString(c);
+    }else{
+        pTimer->setString("10");
+    }
 }
