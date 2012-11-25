@@ -5,6 +5,8 @@
 #include "SF_Aircraft.h"
 #include "SF_Missile.h"
 
+#define MAX_SHOOT_POWER 40
+
 typedef struct Missile_struct{
     cocos2d::CCSprite *Missile;                                        //이미지
     SF_Missile Missile_class;                                          //미사일 클래
@@ -42,6 +44,10 @@ public:
     cocos2d::CCLabelTTF *pLabel;
     cocos2d::CCSize winSize;
     cocos2d::CCSprite* pArrow;
+    cocos2d::CCSprite* pPowergauge;
+    cocos2d::CCSprite* pCheckbar;
+    cocos2d::CCSprite* pGreendot;
+    cocos2d::CCSprite* pReddot;
     
     int player_num;
     int Missile_count,Missile_base;
@@ -49,6 +55,13 @@ public:
     
     virtual void didAccelerate(cocos2d::CCAcceleration* pAccelerationValue);
     void setting_scene();
+    
+    //파워게이지
+    bool Powerbar_Direction;
+    void Move_Powerbar();
+    double Get_Powerposition();//파워를 계산해줌
+    //미니맵
+    void MiniMap_dot();         //미니맵의 포인트를 조정해줌
 };
 
 #endif

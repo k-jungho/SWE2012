@@ -12,6 +12,7 @@
 #include "SF_Object.h"
 
 #define ELASTICITY 0.7
+#define PI 3.141592
 
 class SF_Aircraft : public SF_Object
 {

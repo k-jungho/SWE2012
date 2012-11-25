@@ -57,12 +57,12 @@ void SF_Aircraft::Set_velocity(double x, double y){
 }
 
 void SF_Aircraft::Add_angle(double x){
-    Angle+=x/10;
-    if(Angle>360){
+    Angle+=x/(double)40;
+    if(Angle>2*PI){
         Angle=0;
     }
     if(Angle<0){
-        Angle=360;
+        Angle=2*PI;
     }
 }
 

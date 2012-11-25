@@ -14,10 +14,10 @@
 class SF_Missile : public SF_Object
 {
     private:
-    double velocity;
-    int power;
+    SF_vector velocity;
+    int power;                  //미사일 종류
 public:
-    void Init_Missile(double x, double y, int power);
+    void Init_Missile(double x, double y, SF_vector Shoot_angle, int power);
     void Set_Missile_velocity(double velocity);
     int Get_Missile_power();
     void Missile_Move(cocos2d::CCSize winSize);
