@@ -32,7 +32,7 @@
     }
 }
 
-- (NSData*) MakePacket:(int) flag:(SF_vector) position:(SF_vector) velocity
++ (NSData*) MakePacket:(int) flag:(SF_vector) position:(SF_vector) velocity
 {
     Byte buffer[34];
     buffer[0] = (Byte)flag;

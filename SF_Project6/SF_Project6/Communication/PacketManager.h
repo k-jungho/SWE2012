@@ -20,6 +20,6 @@
 
 - (void) AnalyzeReceivedPacket:(NSData*) packet;
 
-- (NSData*) MakePacket:(int) flag:(SF_vector) position:(SF_vector) velocity;
++ (NSData*) MakePacket:(int) flag:(SF_vector) position:(SF_vector) velocity;
 
 @end

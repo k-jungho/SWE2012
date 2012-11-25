@@ -1,5 +1,7 @@
+
 #include "SF_Scene.h"
 #include "SimpleAudioEngine.h"
+#include "PacketManager.h"
 #include <math.h>
 
 using namespace cocos2d;
@@ -68,6 +70,8 @@ bool SF_Scene::init()
     
     //파워바 방향 설정
     Powerbar_Direction=true;
+    //플레이어 턴 초기화
+    present_turn=1;
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 	return true;
@@ -79,21 +83,50 @@ void SF_Scene::frame(float dt)
     SF_vector Fighter_position;
     SF_vector Enemy_position;
     SF_vector Missile_position;
-    int Layer_operator;
     
     Fighter.Aircraft_Move(winSize);
+    Enemy.Aircraft_Move(winSize);
+    
     Fighter_position=Fighter.Get_position();
     Enemy_position=Enemy.Get_position();
-    //비행기 포지션에 따른 레이어 재배치
-    if(Fighter_position.x>=winSize.width){
-        Layer_operator=winSize.width;
-    }else{
-        Layer_operator=0;
+    
+    if(present_turn==1 || present_turn==-1){
+        //비행기 포지션에 따른 레이어 재배치
+        if(Fighter_position.x>=winSize.width){
+            Layer_operator=winSize.width;
+        }else{
+            Layer_operator=0;
+        }
+        
+        if(player_num==1){
+            //파워게이지를 움직임
+            Move_Powerbar();
+        }else if(player_num==2){
+            
+        }
+    }else if(present_turn==2 || present_turn==-2){
+        //비행기 포지션에 따른 레이어 재배치
+        if(Enemy_position.x>=winSize.width){
+            Layer_operator=winSize.width;
+        }else{
+            Layer_operator=0;
+        }
+        
+        if(player_num==1){
+            
+        }else if(player_num==2){
+            //파워게이지를 움직임
+            Move_Powerbar();
+        }
     }
+    //미니맵을 움직임
+    MiniMap_dot();
+    //HP그리기
+    Draw_HPbar();
     
     pFighter->setPosition(ccp(Fighter_position.x-Layer_operator,Fighter_position.y));
     pEnemy->setPosition(ccp(Enemy_position.x-Layer_operator,Enemy_position.y));
-    
+    //////////////////////////////////////////////////////////////////////////////
     //미사일을 움직임
     for(int i=0; i<255; i++){
         if(N_Missile[i].enable==true){
@@ -120,7 +153,7 @@ void SF_Scene::frame(float dt)
         arrow_position.x=100*cos(player_angle)+Fighter.Get_position().x;
         arrow_position.y=100*sin(player_angle)+Fighter.Get_position().y;
     }
-    else{ 
+    else if(player_num==2){
         player_angle=Enemy.Get_angle();
         arrow_position.x=100*cos(player_angle)+Enemy.Get_position().x;
         arrow_position.y=100*sin(player_angle)+Enemy.Get_position().y;
@@ -128,21 +161,47 @@ void SF_Scene::frame(float dt)
     pArrow->setPosition(ccp(arrow_position.x-Layer_operator,arrow_position.y));
     pArrow->setRotation(90-player_angle*180/PI);
     
-    //파워게이지를 움직임
-    Move_Powerbar();
-    //미니맵을 움직임
-    MiniMap_dot();
+    //턴을 넘기는 부분
+    count_frame+=dt;
+    if(present_turn==1 || present_turn==2){
+        if(count_frame >= 10){
+            if(present_turn==1){
+                count_frame=0;
+                present_turn=-1;
+            }else if(present_turn==2){
+                count_frame=0;
+                present_turn=-2;
+            }
+        }
+    }else if(present_turn==-1 || present_turn==-2){
+        if(count_frame >=1){
+            if(present_turn==-1){
+                Enemy.Set_velocity(0, 0);
+                Fighter.Set_velocity(0, 0);
+                count_frame=0;
+                present_turn=2;
+            }else if(present_turn==-2){
+                Enemy.Set_velocity(0, 0);
+                Fighter.Set_velocity(0, 0);
+                count_frame=0;
+                present_turn=1;
+            }
+        }
+    }
 }
 
 void SF_Scene::didAccelerate(CCAcceleration* pAccelerationValue)
 {
-    if(player_num==1){
-        Fighter.Add_velocity(pAccelerationValue->x,0 );
-        Fighter.Add_angle(pAccelerationValue->y);
-    }
-    else if(player_num==2){
-        Enemy.Add_velocity(pAccelerationValue->x,0 );
-        Enemy.Add_angle(-(pAccelerationValue->y));
+    if(present_turn==1){
+        if(player_num==1){
+            Fighter.Add_velocity(pAccelerationValue->x,0 );
+            Fighter.Add_angle(pAccelerationValue->y);
+        }
+    }else if(present_turn==2){
+        if(player_num==2){
+            Enemy.Add_velocity(pAccelerationValue->x,0 );
+            Enemy.Add_angle(-(pAccelerationValue->y));
+        }
     }
 }
 
@@ -150,16 +209,28 @@ void SF_Scene::menuShootCallback(CCObject* pSender) //버튼 입력시 미사일
 {
     SF_vector present_position, Shoot_angle;
     double present_angle;
-    present_position=Fighter.Get_position();
-    present_angle=Fighter.Get_angle();
-    
     double Shoot_power = Get_Powerposition();
+    
+    if(present_turn==1){
+        if(player_num==1){
+            present_position=Fighter.Get_position();
+            present_angle=Fighter.Get_angle();
+        }
+    }else if(present_turn==2){
+        if(player_num==2){
+            present_position=Enemy.Get_position();
+            present_angle=Enemy.Get_angle();
+        }
+    }
+    Shoot_power=20+Shoot_power/2;
     Shoot_angle.x=Shoot_power*cos(present_angle);
     Shoot_angle.y=Shoot_power*sin(present_angle);
     
-    N_Missile[Missile_count].Missile=CCSprite::spriteWithFile("bullet.png");
+    N_Missile[Missile_count].Missile=CCSprite::spriteWithFile("Bomb.png");
     N_Missile[Missile_count].Missile_class.Init_Missile(present_position,Shoot_angle,1);
     N_Missile[Missile_count].Missile->setPosition(ccp(present_position.x,present_position.y));
+    N_Missile[Missile_count].Missile->setScaleX(0.5);
+    N_Missile[Missile_count].Missile->setScaleY(0.5);
     N_Missile[Missile_count].enable=true;
     this->addChild(N_Missile[Missile_count].Missile,1);
     Missile_count++;
@@ -176,7 +247,7 @@ void SF_Scene::select1(CCObject* pSender){
 
 void SF_Scene::select2(CCObject* pSender){
     player_num=2;
-    Enemy.Set_angle(180);
+    Enemy.Set_angle(PI);
     setting_scene();
 }
 
@@ -241,18 +312,30 @@ void SF_Scene::setting_scene(){
     //비행기 이미지 등록
     pFighter = CCSprite::spriteWithFile("Fighter.png");
     //pFighter->setRotation(90);
-    Fighter.Init_Object(winSize.width/2, 2*86);
+    Fighter.Init_Aircraft(winSize.width/2, 2*86);
+    Fighter.Set_angle(0);
     pFighter->setPosition(ccp(Fighter.Get_position().x, Fighter.Get_position().y));
     this->addChild(pFighter,1);
+    pFighter_HPbar = CCSprite::spriteWithFile("HP.png");
+    pFighter_HPbar->setScaleX(0.1);
+    pFighter_HPbar->setScaleY(0.05);
+    pFighter_HPbar->setPosition(ccp(Fighter.Get_position().x, Fighter.Get_position().y-70));
+    this->addChild(pFighter_HPbar, 2);
     
     //적 탱크 이미지 등록
     pEnemy = CCSprite::spriteWithFile("Enemy.png");
-    Enemy.Init_Object(winSize.width*1.5, 2*86);
+    Enemy.Init_Aircraft(winSize.width*1.5, 2*86);
+    Enemy.Set_angle(PI);
     pEnemy->setFlipX(true);
     pEnemy->setScaleX(pFighter->getContentSize().width/pEnemy->getContentSize().width);
     pEnemy->setScaleY(pFighter->getContentSize().height/pEnemy->getContentSize().height);
     pEnemy->setPosition(ccp(Enemy.Get_position().x, Enemy.Get_position().y));
     this->addChild(pEnemy,1);
+    pEnemy_HPbar = CCSprite::spriteWithFile("HP.png");
+    pEnemy_HPbar->setScaleX(0.1);
+    pEnemy_HPbar->setScaleY(0.05);
+    pEnemy_HPbar->setPosition(ccp(Enemy.Get_position().x, Enemy.Get_position().y-70));
+    this->addChild(pEnemy_HPbar, 2);
     
     //디버깅용 자이로센서 감지 등록
     char c[32];
@@ -261,6 +344,14 @@ void SF_Scene::setting_scene(){
     pLabel->setString(c);
 	pLabel->setPosition( ccp(winSize.width / 2, winSize.height - 20) );
 	this->addChild(pLabel, 1);
+    
+    //타이머 등록
+    char a[32];
+    pTimer = CCLabelTTF::labelWithString("Time", "Arial", 34);
+    sprintf( a, "TIME");
+    pTimer->setString(a);
+    pTimer->setPosition(ccp(winSize.width-40,20));
+    this->addChild(pTimer,2);
     
     //화살 추가
     pArrow = CCSprite::spriteWithFile("Arrow.png");
@@ -287,6 +378,8 @@ void SF_Scene::setting_scene(){
     //미사일 초기화
     Missile_count=0;
     Missile_base=0;
+    //프레임 수를 세기 위해 초기화
+    count_frame=0;
     
     setIsAccelerometerEnabled(true);
     
@@ -330,11 +423,6 @@ void SF_Scene::MiniMap_dot(){
     P1_position = Fighter.Get_position();
     P2_position = Enemy.Get_position();
     
-    char c[32];
-    sprintf( c, "%f %f", minimap_size.width, minimap_size.height);
-    pLabel->setString(c);
-    pLabel->setPosition( ccp(winSize.width / 2, winSize.height - 20) );
-    
     if(player_num == 1){
         pGreendot->setPosition(ccp(minimap_position.x-minimap_size.width/2+P1_position.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
         pReddot->setPosition(ccp(minimap_position.x-minimap_size.width/2+P2_position.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
@@ -342,4 +430,23 @@ void SF_Scene::MiniMap_dot(){
         pGreendot->setPosition(ccp(minimap_position.x-minimap_size.width/2+P2_position.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
         pReddot->setPosition(ccp(minimap_position.x-minimap_size.width/2+P1_position.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
     }
+}
+
+void SF_Scene::Draw_HPbar(){
+    int Fighter_HP, Enemy_HP;
+    SF_vector fighter_pos, enemy_pos;
+    Fighter_HP = Fighter.Get_HP();
+    Enemy_HP = Enemy.Get_HP();
+    fighter_pos=Fighter.Get_position();
+    enemy_pos=Enemy.Get_position();
+    
+    char c[32];
+    sprintf( c, "%d %d", Fighter_HP,Enemy_HP);
+    pLabel->setString(c);
+    pLabel->setPosition( ccp(winSize.width / 2, winSize.height - 20) );
+    
+    pFighter_HPbar->setScaleX((float)Fighter_HP/1000);
+    pFighter_HPbar->setPosition(ccp(fighter_pos.x-Layer_operator,fighter_pos.y-70));
+    pEnemy_HPbar->setScaleX((float)Enemy_HP/1000);
+    pEnemy_HPbar->setPosition(ccp(enemy_pos.x-Layer_operator,enemy_pos.y-70));
 }

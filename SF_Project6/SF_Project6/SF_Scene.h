@@ -1,9 +1,10 @@
 #ifndef SF_Project6_SF_Scene_h
 #define SF_Project6_SF_Scene_h
-
 #include "cocos2d.h"
 #include "SF_Aircraft.h"
 #include "SF_Missile.h"
+
+
 
 #define MAX_SHOOT_POWER 40
 
@@ -38,10 +39,14 @@ public:
     cocos2d::CCSprite* pMiniMap;
     
     cocos2d::CCSprite* pFighter;
+    cocos2d::CCSprite* pFighter_HPbar;
     SF_Aircraft Fighter;
     cocos2d::CCSprite* pEnemy;
+    cocos2d::CCSprite* pEnemy_HPbar;
     SF_Aircraft Enemy;
+    
     cocos2d::CCLabelTTF *pLabel;
+    cocos2d::CCLabelTTF *pTimer;
     cocos2d::CCSize winSize;
     cocos2d::CCSprite* pArrow;
     cocos2d::CCSprite* pPowergauge;
@@ -50,6 +55,8 @@ public:
     cocos2d::CCSprite* pReddot;
     
     int player_num;
+    int present_turn;
+    int Layer_operator;
     int Missile_count,Missile_base;
     Missile_struct N_Missile[255];                                      //대기중인 노드
     
@@ -62,6 +69,10 @@ public:
     double Get_Powerposition();//파워를 계산해줌
     //미니맵
     void MiniMap_dot();         //미니맵의 포인트를 조정해줌
+    //프레임수를 카운팅함
+    float count_frame;
+    //체력바
+    void Draw_HPbar();
 };
 
 #endif

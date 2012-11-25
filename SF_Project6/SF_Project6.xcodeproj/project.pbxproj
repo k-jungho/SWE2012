@@ -141,12 +141,14 @@
 		8117E23B163947EB00DD9D67 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8117E23A163947EB00DD9D67 /* AppController.mm */; };
 		8117E23E163947EB00DD9D67 /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8117E23D163947EB00DD9D67 /* RootViewController.mm */; };
 		8117E242163947EB00DD9D67 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8117E241163947EB00DD9D67 /* AppDelegate.cpp */; };
-		8117E2521639484600DD9D67 /* SF_Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8117E2511639484600DD9D67 /* SF_Scene.cpp */; };
+		8117E2521639484600DD9D67 /* SF_Scene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8117E2511639484600DD9D67 /* SF_Scene.mm */; };
 		8117E255163949FD00DD9D67 /* goodFighter.png in Resources */ = {isa = PBXBuildFile; fileRef = 8117E253163949FD00DD9D67 /* goodFighter.png */; };
 		8117E256163949FD00DD9D67 /* 하늘.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8117E254163949FD00DD9D67 /* 하늘.jpg */; };
 		8117E25A163952AC00DD9D67 /* SF_Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8117E259163952AC00DD9D67 /* SF_Object.cpp */; };
 		8117E25D1639536D00DD9D67 /* SF_Aircraft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8117E25C1639536D00DD9D67 /* SF_Aircraft.cpp */; };
 		8117E26016395AE400DD9D67 /* SF_Missile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8117E25F16395AE400DD9D67 /* SF_Missile.cpp */; };
+		811C12E21662519B00AE5980 /* HP.png in Resources */ = {isa = PBXBuildFile; fileRef = 811C12E11662519B00AE5980 /* HP.png */; };
+		811C12E516626A3B00AE5980 /* Bomb.png in Resources */ = {isa = PBXBuildFile; fileRef = 811C12E416626A3B00AE5980 /* Bomb.png */; };
 		8138D313165A7D7A0037E4BD /* Arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 8138D312165A7D7A0037E4BD /* Arrow.png */; };
 		8151601016398E55009FE137 /* bullet.png in Resources */ = {isa = PBXBuildFile; fileRef = 8151600F16398E55009FE137 /* bullet.png */; };
 		815C982E164E372600D17082 /* Fighter.png in Resources */ = {isa = PBXBuildFile; fileRef = 815C982D164E372600D17082 /* Fighter.png */; };
@@ -442,7 +444,7 @@
 		8117E240163947EB00DD9D67 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Classes/AppDelegate.h; sourceTree = "<group>"; };
 		8117E241163947EB00DD9D67 /* AppDelegate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppDelegate.cpp; path = Classes/AppDelegate.cpp; sourceTree = "<group>"; };
 		8117E2501639482E00DD9D67 /* SF_Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SF_Scene.h; sourceTree = "<group>"; };
-		8117E2511639484600DD9D67 /* SF_Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SF_Scene.cpp; sourceTree = "<group>"; };
+		8117E2511639484600DD9D67 /* SF_Scene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SF_Scene.mm; sourceTree = "<group>"; };
 		8117E253163949FD00DD9D67 /* goodFighter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = goodFighter.png; path = Resources/goodFighter.png; sourceTree = "<group>"; };
 		8117E254163949FD00DD9D67 /* 하늘.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "하늘.jpg"; path = "Resources/하늘.jpg"; sourceTree = "<group>"; };
 		8117E2581639529C00DD9D67 /* SF_Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SF_Object.h; sourceTree = "<group>"; };
@@ -451,6 +453,8 @@
 		8117E25C1639536D00DD9D67 /* SF_Aircraft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SF_Aircraft.cpp; sourceTree = "<group>"; };
 		8117E25E16395AC600DD9D67 /* SF_Missile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SF_Missile.h; sourceTree = "<group>"; };
 		8117E25F16395AE400DD9D67 /* SF_Missile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SF_Missile.cpp; sourceTree = "<group>"; };
+		811C12E11662519B00AE5980 /* HP.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HP.png; path = Resources/HP.png; sourceTree = "<group>"; };
+		811C12E416626A3B00AE5980 /* Bomb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Bomb.png; path = Resources/Bomb.png; sourceTree = "<group>"; };
 		8138D312165A7D7A0037E4BD /* Arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Arrow.png; path = Resources/Arrow.png; sourceTree = "<group>"; };
 		8151600F16398E55009FE137 /* bullet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullet.png; path = Resources/bullet.png; sourceTree = "<group>"; };
 		815C982D164E372600D17082 /* Fighter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Fighter.png; path = Resources/Fighter.png; sourceTree = "<group>"; };
@@ -550,7 +554,9 @@
 				8117E0A6163947E900DD9D67 /* Icon-72.png */,
 				8117E0A8163947E900DD9D67 /* Icon-Small-50.png */,
 				8117E253163949FD00DD9D67 /* goodFighter.png */,
+				811C12E11662519B00AE5980 /* HP.png */,
 				8117E254163949FD00DD9D67 /* 하늘.jpg */,
+				811C12E416626A3B00AE5980 /* Bomb.png */,
 				8117E0AA163947E900DD9D67 /* Icon-Small.png */,
 				8117E0AC163947E900DD9D67 /* Icon-Small@2x.png */,
 				8117E0AE163947E900DD9D67 /* Icon.png */,
@@ -1068,7 +1074,7 @@
 				8117E240163947EB00DD9D67 /* AppDelegate.h */,
 				8117E241163947EB00DD9D67 /* AppDelegate.cpp */,
 				8117E2501639482E00DD9D67 /* SF_Scene.h */,
-				8117E2511639484600DD9D67 /* SF_Scene.cpp */,
+				8117E2511639484600DD9D67 /* SF_Scene.mm */,
 				8117E2581639529C00DD9D67 /* SF_Object.h */,
 				8117E259163952AC00DD9D67 /* SF_Object.cpp */,
 				8117E25B1639535A00DD9D67 /* SF_Aircraft.h */,
@@ -1157,6 +1163,8 @@
 				81865705165A641A006623A4 /* player1.png in Resources */,
 				81865708165A6435006623A4 /* player2.png in Resources */,
 				8138D313165A7D7A0037E4BD /* Arrow.png in Resources */,
+				811C12E21662519B00AE5980 /* HP.png in Resources */,
+				811C12E516626A3B00AE5980 /* Bomb.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1279,7 +1287,7 @@
 				8117E23B163947EB00DD9D67 /* AppController.mm in Sources */,
 				8117E23E163947EB00DD9D67 /* RootViewController.mm in Sources */,
 				8117E242163947EB00DD9D67 /* AppDelegate.cpp in Sources */,
-				8117E2521639484600DD9D67 /* SF_Scene.cpp in Sources */,
+				8117E2521639484600DD9D67 /* SF_Scene.mm in Sources */,
 				8117E25A163952AC00DD9D67 /* SF_Object.cpp in Sources */,
 				8117E25D1639536D00DD9D67 /* SF_Aircraft.cpp in Sources */,
 				8117E26016395AE400DD9D67 /* SF_Missile.cpp in Sources */,

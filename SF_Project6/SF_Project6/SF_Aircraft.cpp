@@ -13,6 +13,7 @@ void SF_Aircraft::Init_Aircraft(double x, double y){
     SF_Object::Init_Object(x, y);
     SF_Aircraft::velocity.x=0;
     SF_Aircraft::velocity.y=0;
+    SF_Aircraft::HP=100;
     Angle=0;
 }
 
@@ -72,4 +73,8 @@ double SF_Aircraft::Get_angle(){
 
 void SF_Aircraft::Set_angle(double y){
     Angle=y;
+}
+
+int SF_Aircraft::Get_HP(){
+    return HP;
 }
