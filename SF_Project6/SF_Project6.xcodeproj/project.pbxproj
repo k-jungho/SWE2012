@@ -528,8 +528,6 @@
 				8117E236163947EB00DD9D67 /* ios */,
 				8117E23F163947EB00DD9D67 /* Classes */,
 				8117E234163947EB00DD9D67 /* Communication */,
-				5C9671E01661B07100E01D33 /* PacketManager.h */,
-				5C9671E11661B07100E01D33 /* PacketManager.mm */,
 			);
 			path = SF_Project6;
 			sourceTree = "<group>";
@@ -1043,6 +1041,8 @@
 		8117E234163947EB00DD9D67 /* Communication */ = {
 			isa = PBXGroup;
 			children = (
+				5C9671E01661B07100E01D33 /* PacketManager.h */,
+				5C9671E11661B07100E01D33 /* PacketManager.mm */,
 				8117E235163947EB00DD9D67 /* Prefix.pch */,
 			);
 			name = Communication;
