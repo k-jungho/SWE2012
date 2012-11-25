@@ -27,17 +27,9 @@
 #import <GameKit/GameKit.h>
 
 
-@interface RootViewController : UIViewController <GKSessionDelegate, GKPeerPickerControllerDelegate>
+@interface RootViewController : UIViewController
 {
-    GKSession *fartSession;
-    GKPeerPickerController *fartPicker;
-    NSMutableArray *fartPeers;
+    
 }
-
-@property (retain) GKSession *fartSession;
-
-- (void) connectToPeers:(id) sender;
-- (void) sendALoudFart:(id) sender;
-- (void) sendASilentAssassin:(id) sender;
 
 @end

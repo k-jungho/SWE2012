@@ -11,6 +11,7 @@
 #import "EAGLView.h"
 #import "AppDelegate.h"
 
+#import "GoyangiViewController.h"
 #import "RootViewController.h"
 
 @implementation AppController
@@ -27,6 +28,18 @@ static AppDelegate s_sharedApplication;
 
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
+    
+    goyangiViewController = [[GoyangiViewController alloc] initWithNibName:nil bundle:nil];
+    goyangiViewController.wantsFullScreenLayout = YES;
+    goyangiViewController.view = MainView;
+    
+    [window addSubview: goyangiViewController.view];
+    [window makeKeyAndVisible];
+    
+    
+    [goyangiViewController.view removeFromSuperview];
+//    [self.view insertSubview: viewController.view atIndex: 0];
+    
     EAGLView *__glView = [EAGLView viewWithFrame: [window bounds]
                                      pixelFormat: kEAGLColorFormatRGBA8
                                      depthFormat: GL_DEPTH_COMPONENT16_OES

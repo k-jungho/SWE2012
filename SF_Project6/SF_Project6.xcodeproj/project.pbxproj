@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5C18D5AF165FD54800F2AE26 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C18D5AE165FD54800F2AE26 /* GameKit.framework */; };
-		5C18D5B4165FDFC400F2AE26 /* Fart.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C18D5B3165FDFC300F2AE26 /* Fart.m */; };
+		5C9671D81660BA5100E01D33 /* GoyangiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C9671D71660BA5100E01D33 /* GoyangiViewController.mm */; };
+		5C9671E21661B07100E01D33 /* PacketManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C9671E11661B07100E01D33 /* PacketManager.mm */; };
 		8117E08D163947E900DD9D67 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8117E08C163947E900DD9D67 /* QuartzCore.framework */; };
 		8117E08F163947E900DD9D67 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8117E08E163947E900DD9D67 /* OpenGLES.framework */; };
 		8117E091163947E900DD9D67 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8117E090163947E900DD9D67 /* OpenAL.framework */; };
@@ -161,8 +162,10 @@
 
 /* Begin PBXFileReference section */
 		5C18D5AE165FD54800F2AE26 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
-		5C18D5B2165FDFC300F2AE26 /* Fart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fart.h; sourceTree = "<group>"; };
-		5C18D5B3165FDFC300F2AE26 /* Fart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Fart.m; sourceTree = "<group>"; };
+		5C9671D61660BA5100E01D33 /* GoyangiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GoyangiViewController.h; path = ios/GoyangiViewController.h; sourceTree = "<group>"; };
+		5C9671D71660BA5100E01D33 /* GoyangiViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GoyangiViewController.mm; path = ios/GoyangiViewController.mm; sourceTree = "<group>"; };
+		5C9671E01661B07100E01D33 /* PacketManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PacketManager.h; path = Communication/PacketManager.h; sourceTree = "<group>"; };
+		5C9671E11661B07100E01D33 /* PacketManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PacketManager.mm; path = Communication/PacketManager.mm; sourceTree = "<group>"; };
 		8117E088163947E900DD9D67 /* SF_Project6.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SF_Project6.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8117E08C163947E900DD9D67 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8117E08E163947E900DD9D67 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -487,9 +490,9 @@
 		8117E07D163947E800DD9D67 = {
 			isa = PBXGroup;
 			children = (
-				8117E09C163947E900DD9D67 /* SF_Project6 */,
 				8117E08B163947E900DD9D67 /* Frameworks */,
 				8117E089163947E900DD9D67 /* Products */,
+				8117E09C163947E900DD9D67 /* SF_Project6 */,
 			);
 			sourceTree = "<group>";
 		};
@@ -524,7 +527,9 @@
 				8117E0B5163947E900DD9D67 /* libs */,
 				8117E236163947EB00DD9D67 /* ios */,
 				8117E23F163947EB00DD9D67 /* Classes */,
-				8117E234163947EB00DD9D67 /* Supporting Files */,
+				8117E234163947EB00DD9D67 /* Communication */,
+				5C9671E01661B07100E01D33 /* PacketManager.h */,
+				5C9671E11661B07100E01D33 /* PacketManager.mm */,
 			);
 			path = SF_Project6;
 			sourceTree = "<group>";
@@ -1035,24 +1040,24 @@
 			name = iphone;
 			sourceTree = "<group>";
 		};
-		8117E234163947EB00DD9D67 /* Supporting Files */ = {
+		8117E234163947EB00DD9D67 /* Communication */ = {
 			isa = PBXGroup;
 			children = (
 				8117E235163947EB00DD9D67 /* Prefix.pch */,
 			);
-			name = "Supporting Files";
+			name = Communication;
 			sourceTree = "<group>";
 		};
 		8117E236163947EB00DD9D67 /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				5C9671D61660BA5100E01D33 /* GoyangiViewController.h */,
+				5C9671D71660BA5100E01D33 /* GoyangiViewController.mm */,
 				8117E237163947EB00DD9D67 /* main.m */,
 				8117E239163947EB00DD9D67 /* AppController.h */,
 				8117E23A163947EB00DD9D67 /* AppController.mm */,
 				8117E23C163947EB00DD9D67 /* RootViewController.h */,
 				8117E23D163947EB00DD9D67 /* RootViewController.mm */,
-				5C18D5B2165FDFC300F2AE26 /* Fart.h */,
-				5C18D5B3165FDFC300F2AE26 /* Fart.m */,
 			);
 			name = ios;
 			sourceTree = "<group>";
@@ -1281,7 +1286,8 @@
 				818B9FCA163E742E002C234B /* SF_Item.cpp in Sources */,
 				818B9FCD163E7453002C234B /* SF_Shield_Item.cpp in Sources */,
 				818B9FD0163E747B002C234B /* SF_GuidedMissile.cpp in Sources */,
-				5C18D5B4165FDFC400F2AE26 /* Fart.m in Sources */,
+				5C9671D81660BA5100E01D33 /* GoyangiViewController.mm in Sources */,
+				5C9671E21661B07100E01D33 /* PacketManager.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
