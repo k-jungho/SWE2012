@@ -80,8 +80,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     // enable High Resource Mode(2x, such as iphone4) and maintains low resource on other devices.
     // pDirector->enableRetinaDisplay(true);
 
-	// sets landscape mode
-	// pDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
+    // sets landscape mode
+    // pDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
 
 	// turn on display FPS
 	pDirector->setDisplayFPS(true);
