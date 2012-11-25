@@ -145,6 +145,7 @@ void SF_Scene::frame(float dt)
             this->removeChild(pMissile,true);
             count_frame=0;
             check_shoot=false;
+            this->removeChild(pYellowdot, true);
             if(present_turn==1)
                 present_turn=-1;
             else if(present_turn==2)
@@ -236,7 +237,7 @@ void SF_Scene::menuShootCallback(CCObject* pSender) //버튼 입력시 미사일
             
             if(present_turn==1){
                 if(player_num==1){
-                        present_position=Fighter.Get_position();
+                    present_position=Fighter.Get_position();
                     present_angle=Fighter.Get_angle();
                 }
             }else if(present_turn==2){
@@ -451,6 +452,7 @@ double SF_Scene::Get_Powerposition(){
 
 void SF_Scene::MiniMap_dot(){
     CCSize minimap_size = pMiniMap->getContentSize();
+    CCRect minimap_bountbox = pMiniMap->boundingBox();
     CCPoint minimap_position = pMiniMap->getPosition();
     SF_vector P1_position, P2_position;
     
@@ -467,7 +469,7 @@ void SF_Scene::MiniMap_dot(){
     
     if(check_shoot==true){
         SF_vector Missile_pos = Missile.Get_position();
-        pYellowdot->setPosition(ccp(minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,minimap_position.y-40));
+        pYellowdot->setPosition(ccp(minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,minimap_position.y-minimap_bountbox.size.height/2+Missile_pos.y/(winSize.height)*minimap_bountbox.size.height));
     }
 }
 
