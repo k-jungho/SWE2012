@@ -145,7 +145,6 @@ void SF_Scene::frame(float dt)
             this->removeChild(pMissile,true);
             count_frame=0;
             check_shoot=false;
-            //this->removeChild(pYellowdot, true);
             if(present_turn==1)
                 present_turn=-1;
             else if(present_turn==2)
@@ -229,42 +228,49 @@ void SF_Scene::didAccelerate(CCAcceleration* pAccelerationValue)
 
 void SF_Scene::menuShootCallback(CCObject* pSender) //버튼 입력시 미사일 발사
 {
-    if(check_shoot==false){
-        SF_vector present_position, Shoot_angle;
-        double present_angle;
-        double Shoot_power = Get_Powerposition();
-    
-        if(present_turn==1){
-            if(player_num==1){
-                    present_position=Fighter.Get_position();
-                present_angle=Fighter.Get_angle();
+    if(player_num==present_turn){
+        if(check_shoot==false){
+            SF_vector present_position, Shoot_angle;
+            double present_angle;
+            double Shoot_power = Get_Powerposition();
+            
+            if(present_turn==1){
+                if(player_num==1){
+                        present_position=Fighter.Get_position();
+                    present_angle=Fighter.Get_angle();
+                }
+            }else if(present_turn==2){
+                if(player_num==2){
+                    present_position=Enemy.Get_position();
+                    present_angle=Enemy.Get_angle();
+                }
             }
-        }else if(present_turn==2){
-            if(player_num==2){
-                present_position=Enemy.Get_position();
-                present_angle=Enemy.Get_angle();
-            }
+            Shoot_power=20+Shoot_power/2;
+            Shoot_angle.x=Shoot_power*cos(present_angle);
+            Shoot_angle.y=Shoot_power*sin(present_angle);
+            
+            pMissile=CCSprite::spriteWithFile("Bomb.png");
+            Missile.Init_Missile(present_position,Shoot_angle,1);
+            pMissile->setPosition(ccp(present_position.x,present_position.y));
+            pMissile->setScaleX(0.5);
+            pMissile->setScaleY(0.5);
+            this->addChild(pMissile,1);
+            check_shoot=true;
+        
+            CCSize minimap_size = pMiniMap->getContentSize();
+            CCPoint minimap_position = pMiniMap->getPosition();
+            SF_vector Missile_pos = Missile.Get_position();
+        
+            char c[32];
+            sprintf( c, "%f %f", minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,minimap_position.y-40);
+            pLabel->setString(c);
+            pLabel->setPosition( ccp(winSize.width / 2, winSize.height - 20) );
+            
+            pYellowdot=CCSprite::spriteWithFile("Yellow_dot.png");
+            pYellowdot->setOpacity(180);
+            pYellowdot->setPosition(ccp(minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,minimap_position.y-40));
+            this->addChild(pYellowdot,2);
         }
-        Shoot_power=20+Shoot_power/2;
-        Shoot_angle.x=Shoot_power*cos(present_angle);
-        Shoot_angle.y=Shoot_power*sin(present_angle);
-    
-        pMissile=CCSprite::spriteWithFile("Bomb.png");
-        Missile.Init_Missile(present_position,Shoot_angle,1);
-        pMissile->setPosition(ccp(present_position.x,present_position.y));
-        pMissile->setScaleX(0.5);
-        pMissile->setScaleY(0.5);
-        this->addChild(pMissile,1);
-        check_shoot=true;
-        
-        CCSize minimap_size = pMiniMap->getContentSize();
-        CCPoint minimap_position = pMiniMap->getPosition();
-        SF_vector Missile_pos = Missile.Get_position();
-        
-        char c[32];
-        sprintf( c, "%f %f", minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,minimap_position.y-40);
-        pLabel->setString(c);
-        pLabel->setPosition( ccp(winSize.width / 2, winSize.height - 20) );
     }
 }
 
@@ -325,10 +331,6 @@ void SF_Scene::setting_scene(){
     pGreendot->setOpacity(180);
     pReddot=CCSprite::spriteWithFile("red_dot.png");
     pReddot->setOpacity(180);
-    pYellowdot=CCSprite::spriteWithFile("Yellow_dot.png");
-    pYellowdot->setOpacity(180);
-    pYellowdot->setPosition(ccp(winSize.width/2,winSize.height/2));
-    this->addChild(pYellowdot, 2);
     
     if(player_num==1){
         pGreendot->setPosition(ccp(Minimap_position.x-Minimap_size.width/4,(Minimap_position.y-40)));
@@ -465,7 +467,7 @@ void SF_Scene::MiniMap_dot(){
     
     if(check_shoot==true){
         SF_vector Missile_pos = Missile.Get_position();
-        //pYellowdot->setPosition(ccp(minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,(minimap_position.y-40)));
+        pYellowdot->setPosition(ccp(minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,minimap_position.y-40));
     }
 }
 
