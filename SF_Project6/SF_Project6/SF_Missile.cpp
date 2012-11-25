@@ -19,7 +19,7 @@ void SF_Missile::Init_Missile(SF_vector Shoot_pos, SF_vector Shoot_angle, int po
 void SF_Missile::Missile_Move(cocos2d::CCSize winSize){
     SF_vector temp;
     temp=SF_Object::Get_position();
-    velocity.y+=-0.5;
+    velocity.y+=-0.2;
     
     temp.x+=velocity.x;
     temp.y+=velocity.y;

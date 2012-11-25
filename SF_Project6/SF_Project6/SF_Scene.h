@@ -57,6 +57,7 @@ public:
     cocos2d::CCSprite* pMissile;
     SF_Missile Missile;
     bool check_shoot;
+    bool check_END;
     
     virtual void didAccelerate(cocos2d::CCAcceleration* pAccelerationValue);
     void setting_scene();
@@ -72,6 +73,8 @@ public:
     //체력바
     void Draw_HPbar();
     void Write_Time();
+    void Check_hit();
+    void Game_END();
     
 private:
     float prev_elapsedTime;

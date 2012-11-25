@@ -72,6 +72,8 @@ bool SF_Scene::init()
     Powerbar_Direction=true;
     //플레이어 턴 초기화
     present_turn=1;
+    //게임의 종료 여부
+    check_END=false;
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 	return true;
@@ -79,6 +81,7 @@ bool SF_Scene::init()
 
 void SF_Scene::frame(float dt)	
 {
+    if(check_END==false){
     //비행기를 움직임
     SF_vector Fighter_position;
     SF_vector Enemy_position;
@@ -151,11 +154,9 @@ void SF_Scene::frame(float dt)
             else if(present_turn==2)
                 present_turn=-2;
         }
-//    if( CCRect::CCRectIntersectsRect(pMissile->boundingBox(), pEnemy->boundingBox()) )
-//    {
-//        
-//    }
     }
+    //미사일 요격을 감지 & HP가 0이 되면 게임 종료
+    Check_hit();
 
     //각도 표시부
     double player_angle;
@@ -177,7 +178,8 @@ void SF_Scene::frame(float dt)
     Write_Time();
     
     //턴을 넘기는 부분
-    count_frame+=dt;
+    if(check_shoot==false)
+        count_frame+=dt;
     
     if(present_turn == player_num && count_frame - prev_elapsedTime >= 0.1)
     {
@@ -193,21 +195,27 @@ void SF_Scene::frame(float dt)
             }else if(present_turn==2){
                 count_frame=0;
                 present_turn=-2;
+                }
+            }
+        }else if(present_turn==-1 || present_turn==-2){
+            if(count_frame >=1){//나중에 상대방 시작패킷 받으면 시작하는걸로 바꿔
+                present_turn += 3;
+                Enemy.Set_velocity(0, 0);
+                Fighter.Set_velocity(0, 0);
+            
+                if(present_turn == player_num)
+                {
+                    //~~.sendpacket(4, ~~);
+                }
+                count_frame = 0;
+                check_shoot=false;
+                prev_elapsedTime = 0;
             }
         }
-    }else if(present_turn==-1 || present_turn==-2){
-        if(count_frame >=1){//나중에 상대방 시작패킷 받으면 시작하는걸로 바꿔
-            present_turn += 3;
-            Enemy.Set_velocity(0, 0);
-            Fighter.Set_velocity(0, 0);
-            
-            if(present_turn == player_num)
-            {
-                //~~.sendpacket(4, ~~);
-            }
-            count_frame = 0;
-            check_shoot=false;
-            prev_elapsedTime = 0;
+        if(Fighter.Get_HP()<=0 || Enemy.Get_HP()<=0){
+            //게임 종료
+            Game_END();
+            check_END=true;
         }
     }
 }
@@ -246,12 +254,12 @@ void SF_Scene::menuShootCallback(CCObject* pSender) //버튼 입력시 미사일
                     present_angle=Enemy.Get_angle();
                 }
             }
-            Shoot_power=20+Shoot_power/2;
+            Shoot_power=10+Shoot_power/8;
             Shoot_angle.x=Shoot_power*cos(present_angle);
             Shoot_angle.y=Shoot_power*sin(present_angle);
             
             pMissile=CCSprite::spriteWithFile("Bomb.png");
-            Missile.Init_Missile(present_position,Shoot_angle,1);
+            Missile.Init_Missile(present_position,Shoot_angle,50);
             pMissile->setPosition(ccp(present_position.x,present_position.y));
             pMissile->setScaleX(0.5);
             pMissile->setScaleY(0.5);
@@ -496,5 +504,79 @@ void SF_Scene::Write_Time(){
         pTimer->setString(c);
     }else{
         pTimer->setString("10");
+    }
+}
+
+void SF_Scene::Check_hit(){
+    if(check_shoot==true){
+        if(present_turn == player_num){
+            if(player_num==1){
+                if(CCRect::CCRectIntersectsRect(pMissile->boundingBox(), pEnemy->boundingBox())){
+                    Enemy.Sub_HP(Missile.Get_Missile_power());
+                    check_shoot=false;
+                    present_turn=-1;
+                    this->removeChild(pMissile,true);
+                    this->removeChild(pYellowdot, true);
+                }
+            }else if(player_num==2){
+                if(CCRect::CCRectIntersectsRect(pMissile->boundingBox(), pFighter->boundingBox())){
+                    Fighter.Sub_HP(Missile.Get_Missile_power());
+                    check_shoot=false;
+                    present_turn=-2;
+                    this->removeChild(pMissile,true);
+                    this->removeChild(pYellowdot, true);
+                }
+            }
+        }
+    }
+}
+
+void SF_Scene::Game_END(){
+    //this->removeChild(wait_backgroud, true);
+    //this->removeChild(pFighter, true);
+    //this->removeChild(pEnemy, true);
+    //this->removeChild(pPowergauge, true);
+    //this->removeChild(pMiniMap, true);
+    //this->removeChild(pCheckbar, true);
+    //this->removeChild(pReddot, true);
+    //this->removeChild(pGreendot, true);
+    this->removeAllChildrenWithCleanup(true);
+    
+    if(player_num==1){
+        if(Fighter.Get_HP()>0){
+            wait_backgroud = CCSprite::spriteWithFile("win_Scene.jpg");
+            // position the sprite on the center of the screen
+            wait_backgroud->setScaleX(winSize.width/wait_backgroud->getContentSize().width);
+            wait_backgroud->setScaleY(winSize.height/wait_backgroud->getContentSize().height);
+            wait_backgroud->setPosition( ccp(winSize.width/2, winSize.height/2) );
+            // add the sprite as a child to this layer
+            this->addChild(wait_backgroud, 0);
+        }else{
+            wait_backgroud = CCSprite::spriteWithFile("Lose_Scene.jpg");
+            // position the sprite on the center of the screen
+            wait_backgroud->setScaleX(winSize.width/wait_backgroud->getContentSize().width);
+            wait_backgroud->setScaleY(winSize.height/wait_backgroud->getContentSize().height);
+            wait_backgroud->setPosition( ccp(winSize.width/2, winSize.height/2) );
+            // add the sprite as a child to this layer
+            this->addChild(wait_backgroud, 0);
+        }
+    }else if(player_num==2){
+        if(Fighter.Get_HP()>0){
+            wait_backgroud = CCSprite::spriteWithFile("Lose_Scene.jpg");
+            // position the sprite on the center of the screen
+            wait_backgroud->setScaleX(winSize.width/wait_backgroud->getContentSize().width);
+            wait_backgroud->setScaleY(winSize.height/wait_backgroud->getContentSize().height);
+            wait_backgroud->setPosition( ccp(winSize.width/2, winSize.height/2) );
+            // add the sprite as a child to this layer
+            this->addChild(wait_backgroud, 0);
+        }else{
+            wait_backgroud = CCSprite::spriteWithFile("win_Scene.jpg");
+            // position the sprite on the center of the screen
+            wait_backgroud->setScaleX(winSize.width/wait_backgroud->getContentSize().width);
+            wait_backgroud->setScaleY(winSize.height/wait_backgroud->getContentSize().height);
+            wait_backgroud->setPosition( ccp(winSize.width/2, winSize.height/2) );
+            // add the sprite as a child to this layer
+            this->addChild(wait_backgroud, 0);
+        }
     }
 }

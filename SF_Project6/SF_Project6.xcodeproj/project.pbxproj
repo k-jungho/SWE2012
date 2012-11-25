@@ -166,6 +166,8 @@
 		8183CC7A166299B200147DF1 /* earcon_done_listening.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8183CC75166299B200147DF1 /* earcon_done_listening.wav */; };
 		8183CC7B166299B200147DF1 /* earcon_listening.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8183CC76166299B200147DF1 /* earcon_listening.wav */; };
 		8183CC7C166299B200147DF1 /* power_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 8183CC77166299B200147DF1 /* power_bar.png */; };
+		8183CC7E1662A94300147DF1 /* Lose_Scene.png in Resources */ = {isa = PBXBuildFile; fileRef = 8183CC7D1662A94300147DF1 /* Lose_Scene.png */; };
+		8183CC801662AB1900147DF1 /* win_Scene.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8183CC7F1662AB1800147DF1 /* win_Scene.jpg */; };
 		81865705165A641A006623A4 /* player1.png in Resources */ = {isa = PBXBuildFile; fileRef = 81865704165A641A006623A4 /* player1.png */; };
 		81865708165A6435006623A4 /* player2.png in Resources */ = {isa = PBXBuildFile; fileRef = 81865707165A6435006623A4 /* player2.png */; };
 		818ACEA71641828200566648 /* MiniMap.png in Resources */ = {isa = PBXBuildFile; fileRef = 818ACEA61641828200566648 /* MiniMap.png */; };
@@ -484,6 +486,8 @@
 		8183CC75166299B200147DF1 /* earcon_done_listening.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = earcon_done_listening.wav; path = Resources/earcon_done_listening.wav; sourceTree = "<group>"; };
 		8183CC76166299B200147DF1 /* earcon_listening.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = earcon_listening.wav; path = Resources/earcon_listening.wav; sourceTree = "<group>"; };
 		8183CC77166299B200147DF1 /* power_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = power_bar.png; path = Resources/power_bar.png; sourceTree = "<group>"; };
+		8183CC7D1662A94300147DF1 /* Lose_Scene.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Lose_Scene.png; path = Resources/Lose_Scene.png; sourceTree = "<group>"; };
+		8183CC7F1662AB1800147DF1 /* win_Scene.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = win_Scene.jpg; path = Resources/win_Scene.jpg; sourceTree = "<group>"; };
 		81865704165A641A006623A4 /* player1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = player1.png; path = Resources/player1.png; sourceTree = "<group>"; };
 		81865707165A6435006623A4 /* player2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = player2.png; path = Resources/player2.png; sourceTree = "<group>"; };
 		818ACEA61641828200566648 /* MiniMap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MiniMap.png; path = Resources/MiniMap.png; sourceTree = "<group>"; };
@@ -590,8 +594,10 @@
 				815C9831164E396700D17082 /* ground.png */,
 				8117E0A6163947E900DD9D67 /* Icon-72.png */,
 				8183CC67166292CF00147DF1 /* Yellow_dot.png */,
+				8183CC7D1662A94300147DF1 /* Lose_Scene.png */,
 				8183CC6C166294F800147DF1 /* red_dot.png */,
 				8117E0A8163947E900DD9D67 /* Icon-Small-50.png */,
+				8183CC7F1662AB1800147DF1 /* win_Scene.jpg */,
 				8117E253163949FD00DD9D67 /* goodFighter.png */,
 				811C12E11662519B00AE5980 /* HP.png */,
 				8183CC6A166294EE00147DF1 /* green_dot.png */,
@@ -1213,6 +1219,8 @@
 				8183CC7A166299B200147DF1 /* earcon_done_listening.wav in Resources */,
 				8183CC7B166299B200147DF1 /* earcon_listening.wav in Resources */,
 				8183CC7C166299B200147DF1 /* power_bar.png in Resources */,
+				8183CC7E1662A94300147DF1 /* Lose_Scene.png in Resources */,
+				8183CC801662AB1900147DF1 /* win_Scene.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
