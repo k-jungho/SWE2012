@@ -17,6 +17,7 @@
 @implementation AppController
 
 RootViewController* pRootViewController = NULL;
+UIWindow* pWindow = nil;
 
 #pragma mark -
 #pragma mark Application lifecycle
@@ -30,6 +31,7 @@ static AppDelegate s_sharedApplication;
 
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
+    pWindow = window;
     
     EAGLView *__glView = [EAGLView viewWithFrame: [window bounds]
                                      pixelFormat: kEAGLColorFormatRGBA8
@@ -46,23 +48,27 @@ static AppDelegate s_sharedApplication;
     
     pRootViewController = viewController;
     
+    viewConnect = [[GoyangiViewController alloc] initWithNibName:nil bundle:nil];
+    
     // Set RootViewController to window
     if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
     {
         // warning: addSubView doesn't work on iOS6
         [window addSubview: viewController.view];
+        [window addSubview: viewConnect.view];
     }
     else
     {
         // use this method on ios6
-        [window setRootViewController:viewController];
+        //[window setRootViewController:viewController];
+        [window setRootViewController:viewConnect];
     }
     
     [window makeKeyAndVisible];
 
     [[UIApplication sharedApplication] setStatusBarHidden: YES];
 
-    cocos2d::CCApplication::sharedApplication().run();
+    //cocos2d::CCApplication::sharedApplication().run();
     return YES;
 }
 

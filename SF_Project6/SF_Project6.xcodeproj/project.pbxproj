@@ -11,6 +11,7 @@
 		56EF75F3166297F700E8DF87 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF75F2166297F700E8DF87 /* CFNetwork.framework */; };
 		56EF75F5166297FF00E8DF87 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF75F4166297FF00E8DF87 /* Security.framework */; };
 		56EF75FB1662982300E8DF87 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF75FA1662982300E8DF87 /* SystemConfiguration.framework */; };
+		56EF761116629FC500E8DF87 /* SF_Connect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56EF760F16629FC500E8DF87 /* SF_Connect.mm */; };
 		5C18D5AF165FD54800F2AE26 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C18D5AE165FD54800F2AE26 /* GameKit.framework */; };
 		5C9671D81660BA5100E01D33 /* GoyangiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C9671D71660BA5100E01D33 /* GoyangiViewController.mm */; };
 		5C9671E21661B07100E01D33 /* PacketManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C9671E11661B07100E01D33 /* PacketManager.mm */; };
@@ -144,7 +145,7 @@
 		8117E238163947EB00DD9D67 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8117E237163947EB00DD9D67 /* main.m */; };
 		8117E23B163947EB00DD9D67 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8117E23A163947EB00DD9D67 /* AppController.mm */; };
 		8117E23E163947EB00DD9D67 /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8117E23D163947EB00DD9D67 /* RootViewController.mm */; };
-		8117E242163947EB00DD9D67 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8117E241163947EB00DD9D67 /* AppDelegate.cpp */; };
+		8117E242163947EB00DD9D67 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8117E241163947EB00DD9D67 /* AppDelegate.mm */; };
 		8117E2521639484600DD9D67 /* SF_Scene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8117E2511639484600DD9D67 /* SF_Scene.mm */; };
 		8117E255163949FD00DD9D67 /* goodFighter.png in Resources */ = {isa = PBXBuildFile; fileRef = 8117E253163949FD00DD9D67 /* goodFighter.png */; };
 		8117E256163949FD00DD9D67 /* 하늘.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8117E254163949FD00DD9D67 /* 하늘.jpg */; };
@@ -181,6 +182,8 @@
 		56EF75F2166297F700E8DF87 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		56EF75F4166297FF00E8DF87 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		56EF75FA1662982300E8DF87 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		56EF760F16629FC500E8DF87 /* SF_Connect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SF_Connect.mm; sourceTree = "<group>"; };
+		56EF761016629FC500E8DF87 /* SF_Connect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SF_Connect.h; sourceTree = "<group>"; };
 		5C18D5AE165FD54800F2AE26 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		5C9671D61660BA5100E01D33 /* GoyangiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GoyangiViewController.h; path = ios/GoyangiViewController.h; sourceTree = "<group>"; };
 		5C9671D71660BA5100E01D33 /* GoyangiViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GoyangiViewController.mm; path = ios/GoyangiViewController.mm; sourceTree = "<group>"; };
@@ -460,7 +463,7 @@
 		8117E23C163947EB00DD9D67 /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RootViewController.h; path = ios/RootViewController.h; sourceTree = "<group>"; };
 		8117E23D163947EB00DD9D67 /* RootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = RootViewController.mm; path = ios/RootViewController.mm; sourceTree = "<group>"; };
 		8117E240163947EB00DD9D67 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Classes/AppDelegate.h; sourceTree = "<group>"; };
-		8117E241163947EB00DD9D67 /* AppDelegate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AppDelegate.cpp; path = Classes/AppDelegate.cpp; sourceTree = "<group>"; };
+		8117E241163947EB00DD9D67 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Classes/AppDelegate.mm; sourceTree = "<group>"; };
 		8117E2501639482E00DD9D67 /* SF_Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SF_Scene.h; sourceTree = "<group>"; };
 		8117E2511639484600DD9D67 /* SF_Scene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SF_Scene.mm; sourceTree = "<group>"; };
 		8117E253163949FD00DD9D67 /* goodFighter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = goodFighter.png; path = Resources/goodFighter.png; sourceTree = "<group>"; };
@@ -1118,7 +1121,7 @@
 			isa = PBXGroup;
 			children = (
 				8117E240163947EB00DD9D67 /* AppDelegate.h */,
-				8117E241163947EB00DD9D67 /* AppDelegate.cpp */,
+				8117E241163947EB00DD9D67 /* AppDelegate.mm */,
 				8117E2501639482E00DD9D67 /* SF_Scene.h */,
 				8117E2511639484600DD9D67 /* SF_Scene.mm */,
 				8117E2581639529C00DD9D67 /* SF_Object.h */,
@@ -1133,6 +1136,8 @@
 				818B9FCC163E7453002C234B /* SF_Shield_Item.cpp */,
 				818B9FCE163E746B002C234B /* SF_GuidedMissile.h */,
 				818B9FCF163E747B002C234B /* SF_GuidedMissile.cpp */,
+				56EF761016629FC500E8DF87 /* SF_Connect.h */,
+				56EF760F16629FC500E8DF87 /* SF_Connect.mm */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -1342,7 +1347,7 @@
 				8117E238163947EB00DD9D67 /* main.m in Sources */,
 				8117E23B163947EB00DD9D67 /* AppController.mm in Sources */,
 				8117E23E163947EB00DD9D67 /* RootViewController.mm in Sources */,
-				8117E242163947EB00DD9D67 /* AppDelegate.cpp in Sources */,
+				8117E242163947EB00DD9D67 /* AppDelegate.mm in Sources */,
 				8117E2521639484600DD9D67 /* SF_Scene.mm in Sources */,
 				8117E25A163952AC00DD9D67 /* SF_Object.cpp in Sources */,
 				8117E25D1639536D00DD9D67 /* SF_Aircraft.cpp in Sources */,
@@ -1352,6 +1357,7 @@
 				818B9FD0163E747B002C234B /* SF_GuidedMissile.cpp in Sources */,
 				5C9671D81660BA5100E01D33 /* GoyangiViewController.mm in Sources */,
 				5C9671E21661B07100E01D33 /* PacketManager.mm in Sources */,
+				56EF761116629FC500E8DF87 /* SF_Connect.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

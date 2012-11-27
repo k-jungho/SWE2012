@@ -54,8 +54,44 @@ static char text[256] = "Hi";
 	[SpeechKit setEarcon:earconStart forType:SKStartRecordingEarconType];
 	[SpeechKit setEarcon:earconStop forType:SKStopRecordingEarconType];
 	[SpeechKit setEarcon:earconCancel forType:SKCancelRecordingEarconType];
+    
+    
+    fartPicker = [[GKPeerPickerController alloc] init];
+    fartPicker.delegate = self;
+    
+    fartPicker.connectionTypesMask = GKPeerPickerConnectionTypeNearby;
+    fartPeers=[[NSMutableArray alloc] init];
+    
+    UIButton *btnConnect = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [btnConnect addTarget:self action:@selector(connectToPeers:) forControlEvents:UIControlEventTouchUpInside];
+    [btnConnect setTitle:@"Connect" forState:UIControlStateNormal];
+    btnConnect.frame = CGRectMake(20, 100, 280, 30);
+    btnConnect.tag = 12;
+    [self.view addSubview:btnConnect];
 }
 
+// Connect to other peers by displayign the GKPeerPicker
+- (void) connectToPeers:(id) sender{
+    [fartPicker show];
+}
+
+- (void) sendALoudFart:(id)sender{
+    // Making up the Loud Fart sound <img src="http://vivianaranha.com/wp-includes/images/smilies/icon_razz.gif" alt=":P" class="wp-smiley">
+    NSString *loudFart = @"Brrrruuuuuummmmmmmppppppppp";
+    
+    // Send the fart to Peers using teh current sessions
+    [fartSession sendData:[loudFart dataUsingEncoding: NSASCIIStringEncoding] toPeers:fartPeers withDataMode:GKSendDataReliable error:nil];
+    
+}
+
+- (void) sendASilentAssassin:(id)sender{
+    // Making up the Silent Assassin <img src="http://vivianaranha.com/wp-includes/images/smilies/icon_razz.gif" alt=":P" class="wp-smiley">
+    NSString *silentAssassin = @"Puuuuuuuusssssssssssssssss";
+    
+    // Send the fart to Peers using teh current sessions
+    [fartSession sendData:[silentAssassin dataUsingEncoding: NSASCIIStringEncoding] toPeers:fartPeers withDataMode:GKSendDataReliable error:nil];
+    
+}
 
 // Override to allow orientations other than the default portrait orientation.
 // This method is deprecated on ios6
@@ -89,17 +125,14 @@ static char text[256] = "Hi";
 
 
 - (void)dealloc {
-    //    [recordButton release];
-    //    [searchBox release];
-    //    [alternativesDisplay release];
     [voiceSearch release];
+    [fartPeers release];
     
     [super dealloc];
 }
 
 + (void)initialize
 {
-    //voiceSearch = nil;
     transactionState = TS_IDLE;
 }
 
@@ -129,55 +162,13 @@ static char text[256] = "Hi";
 + (char *)getResponse {
     return text;
 }
-//- (IBAction)recordButtonAction: (id)sender {
-//    [searchBox resignFirstResponder];
-//
-//    if (transactionState == TS_RECORDING) {
-//        [voiceSearch stopRecording];
-//    }
-//    else if (transactionState == TS_IDLE) {
-//        SKEndOfSpeechDetection detectionType = SKShortEndOfSpeechDetection;
-//        NSString* recoType = SKSearchRecognizerType;
-//        NSString* langType = @"ko_KR";
-//
-//        transactionState = TS_INITIAL;
-//
-//		alternativesDisplay.text = @"";
-//
-//        if (voiceSearch) [voiceSearch release];
-//
-//        voiceSearch = [[SKRecognizer alloc] initWithType:recoType
-//                                               detection:detectionType
-//                                                language:langType
-//                                                delegate:self];
-//    }
-//}
-//
-//- (IBAction)serverUpdateButtonAction: (id)sender {
-//    [searchBox resignFirstResponder];
-//
-//    if (voiceSearch) [voiceSearch cancel];
-//
-//    [SpeechKit destroy];
-//}
-//
-//#pragma mark -
-//#pragma mark SpeechKitDelegate methods
-//
-//- (void) destroyed {
-//}
-//
-//#pragma mark -
-//#pragma mark SKRecognizerDelegate methods
-//
+
 - (void)recognizerDidBeginRecording:(SKRecognizer *)recognizer
 {
     NSLog(@"Recording started.");
     
     transactionState = TS_RECORDING;
     memcpy(text, [@"Recording..." UTF8String], 256);
-    //[recordButton setTitle:@"Recording..." forState:UIControlStateNormal];
-    //[self performSelector:@selector(updateVUMeter) withObject:nil afterDelay:0.05];
 }
 
 - (void)recognizerDidFinishRecording:(SKRecognizer *)recognizer
@@ -187,7 +178,6 @@ static char text[256] = "Hi";
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     transactionState = TS_PROCESSING;
     memcpy(text, [@"Processing..." UTF8String], 256);
-    //[recordButton setTitle:@"Processing..." forState:UIControlStateNormal];
 }
 
 - (void)recognizer:(SKRecognizer *)recognizer didFinishWithResults:(SKRecognition *)results
@@ -198,24 +188,6 @@ static char text[256] = "Hi";
     long numOfResults = [results.results count];
     
     transactionState = TS_IDLE;
-    //[recordButton setTitle:@"Record" forState:UIControlStateNormal];
-    
-    //    if (numOfResults > 0)
-    //        searchBox.text = [results firstResult];
-    //
-    //	if (numOfResults > 1)
-    //		alternativesDisplay.text = [[results.results subarrayWithRange:NSMakeRange(1, numOfResults-1)] componentsJoinedByString:@"\n"];
-    
-    //    if (results.suggestion) {
-    //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Suggestion"
-    //                                                        message:results.suggestion
-    //                                                       delegate:nil
-    //                                              cancelButtonTitle:@"OK"
-    //                                              otherButtonTitles:nil];
-    //        [alert show];
-    //        [alert release];
-    //
-    //    }
     
     memcpy(text, [[results firstResult] UTF8String], 256);
     
@@ -229,39 +201,81 @@ static char text[256] = "Hi";
     NSLog(@"Session id [%@].", [SpeechKit sessionID]); // for debugging purpose: printing out the speechkit session id
     
     transactionState = TS_IDLE;
-    //[recordButton setTitle:@"Record" forState:UIControlStateNormal];
-    
-    //    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-    //                                                    message:[error localizedDescription]
-    //                                                   delegate:nil
-    //                                          cancelButtonTitle:@"OK"
-    //                                          otherButtonTitles:nil];
-    //    [alert show];
-    //    [alert release];
-    //
-    //    if (suggestion) {
-    //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Suggestion"
-    //                                                        message:suggestion
-    //                                                       delegate:nil
-    //                                              cancelButtonTitle:@"OK"
-    //                                              otherButtonTitles:nil];
-    //        [alert show];
-    //        [alert release];
-    //
-    //    }
     
 	[voiceSearch release];
 	voiceSearch = nil;
 }
-//
-//- (BOOL)textFieldShouldReturn:(UITextField *)textField
-//{
-//    if (textField == searchBox)
-//    {
-//        [searchBox resignFirstResponder];
-//    }
-//    
-//    return YES;
-//}
 
+#pragma mark -
+#pragma mark GKPeerPickerControllerDelegate
+
+// This creates a unique Connection Type for this particular applictaion
+- (GKSession *)peerPickerController:(GKPeerPickerController *)picker sessionForConnectionType:(GKPeerPickerConnectionType)type{
+    // Create a session with a unique session ID - displayName:nil = Takes the iPhone Name
+    GKSession* session = [[GKSession alloc] initWithSessionID:@"com.vivianaranha.sendfart" displayName:nil sessionMode:GKSessionModePeer];
+    return [session autorelease];
+}
+
+// Tells us that the peer was connected
+- (void)peerPickerController:(GKPeerPickerController *)picker didConnectPeer:(NSString *)peerID toSession:(GKSession *)session{
+    
+    // Get the session and assign it locally
+    self.fartSession = session;
+    session.delegate = self;
+    
+    //No need of teh picekr anymore
+    picker.delegate = nil;
+    [picker dismiss];
+    [picker autorelease];
+}
+
+// Function to receive data when sent from peer
+- (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context
+{
+    //Convert received NSData to NSString to display
+    NSString *whatDidIget = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    
+    //memcpy(text, [whatDidIget UTF8String], 256);
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Fart Received" message:whatDidIget delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+    [whatDidIget release];
+}
+
+#pragma mark -
+#pragma mark GKSessionDelegate
+
+- (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state{
+    
+    if(state == GKPeerStateConnected){
+        // Add the peer to the Array
+        [fartPeers addObject:peerID];
+        
+        NSString *str = [NSString stringWithFormat:@"Connected with %@",[session displayNameForPeer:peerID]];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Connected" message:str delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+        // Used to acknowledge that we will be sending data
+        [session setDataReceiveHandler:self withContext:nil];
+        
+        [[self.view viewWithTag:12] removeFromSuperview];
+        
+        UIButton *btnLoudFart = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [btnLoudFart addTarget:self action:@selector(sendALoudFart:) forControlEvents:UIControlEventTouchUpInside];
+        [btnLoudFart setTitle:@"Loud Fart" forState:UIControlStateNormal];
+        btnLoudFart.frame = CGRectMake(20, 150, 280, 30);
+        btnLoudFart.tag = 13;
+        [self.view addSubview:btnLoudFart];
+        
+        UIButton *btnSilentFart = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [btnSilentFart addTarget:self action:@selector(sendASilentAssassin:) forControlEvents:UIControlEventTouchUpInside];
+        [btnSilentFart setTitle:@"Silent Assassin" forState:UIControlStateNormal];
+        btnSilentFart.frame = CGRectMake(20, 200, 280, 30);
+        btnSilentFart.tag = 14;
+        [self.view addSubview:btnSilentFart];
+    }
+    
+}
 @end

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <SpeechKit/SpeechKit.h>
+#import <GameKit/GameKit.h>
 
 enum __transactionState{
     TS_IDLE,
@@ -18,14 +19,20 @@ enum __transactionState{
 
 typedef enum __transactionState _transactionState;
 
-@interface RootViewController : UIViewController <SpeechKitDelegate, SKRecognizerDelegate, UITextFieldDelegate> {
+@interface RootViewController : UIViewController <SpeechKitDelegate, SKRecognizerDelegate, UITextFieldDelegate, GKSessionDelegate, GKPeerPickerControllerDelegate> {
+    
     SKRecognizer* voiceSearch;
+    
+    GKSession *fartSession;
+    GKPeerPickerController *fartPicker;
+    NSMutableArray *fartPeers;
 }
 
 + (void)startRecognition;
 + (void)initialize;
 + (char *)getResponse;
 
-@property(readonly)         SKRecognizer* voiceSearch;
+@property(readonly)     SKRecognizer    *voiceSearch;
+@property(retain)       GKSession       *fartSession;
 
 @end

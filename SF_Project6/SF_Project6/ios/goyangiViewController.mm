@@ -7,6 +7,8 @@
 //
 
 #import "GoyangiViewController.h"
+#import "AppController.h"
+#import "cocos2d.h"
 
 @interface GoyangiViewController ()
 
@@ -148,6 +150,21 @@
         btnSilentFart.frame = CGRectMake(20, 200, 280, 30);
         btnSilentFart.tag = 14;
         [self.view addSubview:btnSilentFart];
+        
+        
+        
+        if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
+        {
+            // warning: addSubView doesn't work on iOS6
+            [self.view removeFromSuperview];
+        }
+        else
+        {
+            // use this method on ios6
+            [pWindow setRootViewController:(UIViewController*)pRootViewController];
+        }
+        
+        cocos2d::CCApplication::sharedApplication().run();
     }
     
 }

@@ -10,6 +10,7 @@
 
 #include "cocos2d.h"
 #include "SF_Scene.h"
+#include "SF_Connect.h"
 
 USING_NS_CC;
 
@@ -81,7 +82,14 @@ bool AppDelegate::applicationDidFinishLaunching()
     // pDirector->enableRetinaDisplay(true);
 
     // sets landscape mode
-    // pDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
+    if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
+    {
+    }
+    else
+    {
+        //pDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
+    }
+    //
 
 	// turn on display FPS
 	pDirector->setDisplayFPS(true);
