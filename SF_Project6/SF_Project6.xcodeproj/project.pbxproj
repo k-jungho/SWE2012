@@ -12,6 +12,10 @@
 		56EF75F5166297FF00E8DF87 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF75F4166297FF00E8DF87 /* Security.framework */; };
 		56EF75FB1662982300E8DF87 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF75FA1662982300E8DF87 /* SystemConfiguration.framework */; };
 		56EF761116629FC500E8DF87 /* SF_Connect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56EF760F16629FC500E8DF87 /* SF_Connect.mm */; };
+		56EF761B166503D400E8DF87 /* Bluetooth.png in Resources */ = {isa = PBXBuildFile; fileRef = 56EF761A166503D400E8DF87 /* Bluetooth.png */; };
+		56EF761E166511CD00E8DF87 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 56EF761D166511CD00E8DF87 /* background.png */; };
+		56EF7620166511E000E8DF87 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 56EF761F166511E000E8DF87 /* Default-Landscape~ipad.png */; };
+		56EF76231665196400E8DF87 /* RecognitionAnalyzer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 56EF76211665196300E8DF87 /* RecognitionAnalyzer.mm */; };
 		5C18D5AF165FD54800F2AE26 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C18D5AE165FD54800F2AE26 /* GameKit.framework */; };
 		5C9671D81660BA5100E01D33 /* GoyangiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C9671D71660BA5100E01D33 /* GoyangiViewController.mm */; };
 		5C9671E21661B07100E01D33 /* PacketManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C9671E11661B07100E01D33 /* PacketManager.mm */; };
@@ -25,7 +29,6 @@
 		8117E09B163947E900DD9D67 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8117E09A163947E900DD9D67 /* CoreGraphics.framework */; };
 		8117E09F163947E900DD9D67 /* CloseNormal.png in Resources */ = {isa = PBXBuildFile; fileRef = 8117E09E163947E900DD9D67 /* CloseNormal.png */; };
 		8117E0A1163947E900DD9D67 /* CloseSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 8117E0A0163947E900DD9D67 /* CloseSelected.png */; };
-		8117E0A3163947E900DD9D67 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8117E0A2163947E900DD9D67 /* Default.png */; };
 		8117E0A5163947E900DD9D67 /* HelloWorld.png in Resources */ = {isa = PBXBuildFile; fileRef = 8117E0A4163947E900DD9D67 /* HelloWorld.png */; };
 		8117E0A7163947E900DD9D67 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 8117E0A6163947E900DD9D67 /* Icon-72.png */; };
 		8117E0A9163947E900DD9D67 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 8117E0A8163947E900DD9D67 /* Icon-Small-50.png */; };
@@ -184,6 +187,11 @@
 		56EF75FA1662982300E8DF87 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		56EF760F16629FC500E8DF87 /* SF_Connect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SF_Connect.mm; sourceTree = "<group>"; };
 		56EF761016629FC500E8DF87 /* SF_Connect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SF_Connect.h; sourceTree = "<group>"; };
+		56EF761A166503D400E8DF87 /* Bluetooth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Bluetooth.png; path = Resources/Bluetooth.png; sourceTree = "<group>"; };
+		56EF761D166511CD00E8DF87 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = Resources/background.png; sourceTree = "<group>"; };
+		56EF761F166511E000E8DF87 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
+		56EF76211665196300E8DF87 /* RecognitionAnalyzer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RecognitionAnalyzer.mm; sourceTree = "<group>"; };
+		56EF76221665196400E8DF87 /* RecognitionAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecognitionAnalyzer.h; sourceTree = "<group>"; };
 		5C18D5AE165FD54800F2AE26 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		5C9671D61660BA5100E01D33 /* GoyangiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GoyangiViewController.h; path = ios/GoyangiViewController.h; sourceTree = "<group>"; };
 		5C9671D71660BA5100E01D33 /* GoyangiViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GoyangiViewController.mm; path = ios/GoyangiViewController.mm; sourceTree = "<group>"; };
@@ -529,6 +537,7 @@
 		8117E07D163947E800DD9D67 = {
 			isa = PBXGroup;
 			children = (
+				56EF761F166511E000E8DF87 /* Default-Landscape~ipad.png */,
 				8117E08B163947E900DD9D67 /* Frameworks */,
 				8117E089163947E900DD9D67 /* Products */,
 				8117E09C163947E900DD9D67 /* SF_Project6 */,
@@ -581,6 +590,8 @@
 				8138D312165A7D7A0037E4BD /* Arrow.png */,
 				81865707165A6435006623A4 /* player2.png */,
 				81865704165A641A006623A4 /* player1.png */,
+				56EF761D166511CD00E8DF87 /* background.png */,
+				56EF761A166503D400E8DF87 /* Bluetooth.png */,
 				815C982F164E38D300D17082 /* Enemy.png */,
 				815C982D164E372600D17082 /* Fighter.png */,
 				818ACEA61641828200566648 /* MiniMap.png */,
@@ -1113,6 +1124,8 @@
 				8117E23A163947EB00DD9D67 /* AppController.mm */,
 				8117E23C163947EB00DD9D67 /* RootViewController.h */,
 				8117E23D163947EB00DD9D67 /* RootViewController.mm */,
+				56EF76211665196300E8DF87 /* RecognitionAnalyzer.mm */,
+				56EF76221665196400E8DF87 /* RecognitionAnalyzer.h */,
 			);
 			name = ios;
 			sourceTree = "<group>";
@@ -1195,7 +1208,6 @@
 			files = (
 				8117E09F163947E900DD9D67 /* CloseNormal.png in Resources */,
 				8117E0A1163947E900DD9D67 /* CloseSelected.png in Resources */,
-				8117E0A3163947E900DD9D67 /* Default.png in Resources */,
 				8117E0A5163947E900DD9D67 /* HelloWorld.png in Resources */,
 				8117E0A7163947E900DD9D67 /* Icon-72.png in Resources */,
 				8117E0A9163947E900DD9D67 /* Icon-Small-50.png in Resources */,
@@ -1226,6 +1238,9 @@
 				8183CC7C166299B200147DF1 /* power_bar.png in Resources */,
 				8183CC7E1662A94300147DF1 /* Lose_Scene.png in Resources */,
 				8183CC801662AB1900147DF1 /* win_Scene.jpg in Resources */,
+				56EF761B166503D400E8DF87 /* Bluetooth.png in Resources */,
+				56EF761E166511CD00E8DF87 /* background.png in Resources */,
+				56EF7620166511E000E8DF87 /* Default-Landscape~ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1358,6 +1373,7 @@
 				5C9671D81660BA5100E01D33 /* GoyangiViewController.mm in Sources */,
 				5C9671E21661B07100E01D33 /* PacketManager.mm in Sources */,
 				56EF761116629FC500E8DF87 /* SF_Connect.mm in Sources */,
+				56EF76231665196400E8DF87 /* RecognitionAnalyzer.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
