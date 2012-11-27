@@ -7,6 +7,7 @@
 //
 
 #import "GoyangiViewController.h"
+#import "RootViewController.h"
 #import "AppController.h"
 #import "cocos2d.h"
 
@@ -17,8 +18,6 @@
 @implementation GoyangiViewController
 
 @synthesize fartSession;
-
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -59,26 +58,7 @@
     [fartPicker show];
 }
 
-- (void) sendALoudFart:(id)sender{
-    // Making up the Loud Fart sound <img src="http://vivianaranha.com/wp-includes/images/smilies/icon_razz.gif" alt=":P" class="wp-smiley">
-    NSString *loudFart = @"Brrrruuuuuummmmmmmppppppppp";
-    
-    // Send the fart to Peers using teh current sessions
-    [fartSession sendData:[loudFart dataUsingEncoding: NSASCIIStringEncoding] toPeers:fartPeers withDataMode:GKSendDataReliable error:nil];
-    
-}
-
-- (void) sendASilentAssassin:(id)sender{
-    // Making up the Silent Assassin <img src="http://vivianaranha.com/wp-includes/images/smilies/icon_razz.gif" alt=":P" class="wp-smiley">
-    NSString *silentAssassin = @"Puuuuuuuusssssssssssssssss";
-    
-    // Send the fart to Peers using teh current sessions
-    [fartSession sendData:[silentAssassin dataUsingEncoding: NSASCIIStringEncoding] toPeers:fartPeers withDataMode:GKSendDataReliable error:nil];
-    
-}
-
 - (void)dealloc {
-    [fartPeers release];
     [super dealloc];
 }
 
@@ -105,19 +85,6 @@
     [picker autorelease];
 }
 
-// Function to receive data when sent from peer
-- (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context
-{
-    //Convert received NSData to NSString to display
-    NSString *whatDidIget = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-    
-    //Dsiplay the fart as a UIAlertView
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Fart Received" message:whatDidIget delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
-    [alert release];
-    [whatDidIget release];
-}
-
 #pragma mark -
 #pragma mark GKSessionDelegate
 
@@ -133,7 +100,7 @@
         [alert release];
         
         // Used to acknowledge that we will be sending data
-        [session setDataReceiveHandler:self withContext:nil];
+        [session setDataReceiveHandler:pRootViewController.self withContext:nil];
         
         [[self.view viewWithTag:12] removeFromSuperview];
         
@@ -143,14 +110,6 @@
         btnLoudFart.frame = CGRectMake(20, 150, 280, 30);
         btnLoudFart.tag = 13;
         [self.view addSubview:btnLoudFart];
-        
-        UIButton *btnSilentFart = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [btnSilentFart addTarget:self action:@selector(sendASilentAssassin:) forControlEvents:UIControlEventTouchUpInside];
-        [btnSilentFart setTitle:@"Silent Assassin" forState:UIControlStateNormal];
-        btnSilentFart.frame = CGRectMake(20, 200, 280, 30);
-        btnSilentFart.tag = 14;
-        [self.view addSubview:btnSilentFart];
-        
         
         
         if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)

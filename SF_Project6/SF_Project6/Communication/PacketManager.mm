@@ -7,10 +7,12 @@
 //
 
 #import "PacketManager.h"
+#import "AppController.h"
+#import "RootViewController.h"
 
 @implementation PacketManager
 
-- (void)AnalyzeReceivedPacket:(NSData*) packet
++ (void)AnalyzeReceivedPacket:(NSData*) packet
 {
     Byte* buffer = (Byte*) [packet bytes];
     
@@ -44,6 +46,14 @@
     [packet getBytes:buffer];
     
     return packet;
+}
+
++ (void) SendPacket:(int)flag pos:(SF_vector)position vel:(SF_vector)velocity
+{
+    NSData* packet = [self MakePacket:flag :position :velocity];
+    
+    [pRootViewController.fartSession sendData:packet toPeers:pRootViewController.fartPeers withDataMode:GKSendDataReliable error:nil];
+
 }
 
 @end

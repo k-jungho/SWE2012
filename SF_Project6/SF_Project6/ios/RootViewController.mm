@@ -18,6 +18,7 @@ static char text[256] = "Hi";
 
 //@synthesize recordButton,searchBox,alternativesDisplay,voiceSearch;
 @synthesize voiceSearch;
+@synthesize fartSession, fartPeers;
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -27,8 +28,6 @@ static char text[256] = "Hi";
     }
     return self;
 }
-
-
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 //- (void)loadView {
@@ -54,43 +53,6 @@ static char text[256] = "Hi";
 	[SpeechKit setEarcon:earconStart forType:SKStartRecordingEarconType];
 	[SpeechKit setEarcon:earconStop forType:SKStopRecordingEarconType];
 	[SpeechKit setEarcon:earconCancel forType:SKCancelRecordingEarconType];
-    
-    
-    fartPicker = [[GKPeerPickerController alloc] init];
-    fartPicker.delegate = self;
-    
-    fartPicker.connectionTypesMask = GKPeerPickerConnectionTypeNearby;
-    fartPeers=[[NSMutableArray alloc] init];
-    
-    UIButton *btnConnect = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [btnConnect addTarget:self action:@selector(connectToPeers:) forControlEvents:UIControlEventTouchUpInside];
-    [btnConnect setTitle:@"Connect" forState:UIControlStateNormal];
-    btnConnect.frame = CGRectMake(20, 100, 280, 30);
-    btnConnect.tag = 12;
-    [self.view addSubview:btnConnect];
-}
-
-// Connect to other peers by displayign the GKPeerPicker
-- (void) connectToPeers:(id) sender{
-    [fartPicker show];
-}
-
-- (void) sendALoudFart:(id)sender{
-    // Making up the Loud Fart sound <img src="http://vivianaranha.com/wp-includes/images/smilies/icon_razz.gif" alt=":P" class="wp-smiley">
-    NSString *loudFart = @"Brrrruuuuuummmmmmmppppppppp";
-    
-    // Send the fart to Peers using teh current sessions
-    [fartSession sendData:[loudFart dataUsingEncoding: NSASCIIStringEncoding] toPeers:fartPeers withDataMode:GKSendDataReliable error:nil];
-    
-}
-
-- (void) sendASilentAssassin:(id)sender{
-    // Making up the Silent Assassin <img src="http://vivianaranha.com/wp-includes/images/smilies/icon_razz.gif" alt=":P" class="wp-smiley">
-    NSString *silentAssassin = @"Puuuuuuuusssssssssssssssss";
-    
-    // Send the fart to Peers using teh current sessions
-    [fartSession sendData:[silentAssassin dataUsingEncoding: NSASCIIStringEncoding] toPeers:fartPeers withDataMode:GKSendDataReliable error:nil];
-    
 }
 
 // Override to allow orientations other than the default portrait orientation.
@@ -108,13 +70,6 @@ static char text[256] = "Hi";
 
 - (BOOL) shouldAutorotate {
     return YES;
-}
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
 
 - (void)viewDidUnload {
@@ -206,6 +161,26 @@ static char text[256] = "Hi";
 	voiceSearch = nil;
 }
 
+
+- (void) sendALoudFart:(id)sender{
+    // Making up the Loud Fart sound <img src="http://vivianaranha.com/wp-includes/images/smilies/icon_razz.gif" alt=":P" class="wp-smiley">
+    NSString *loudFart = @"Brrrruuuuuummmmmmmppppppppp";
+    
+    // Send the fart to Peers using teh current sessions
+    [fartSession sendData:[loudFart dataUsingEncoding: NSASCIIStringEncoding] toPeers:fartPeers withDataMode:GKSendDataReliable error:nil];
+    
+}
+
+- (void) setConnectionVaries:(GKSession*)session second:(GKPeerPickerController*)picker third:(NSMutableArray*)peers
+{
+    fartSession = session;
+    fartPicker = picker;
+    fartPeers = peers;
+    self.fartSession.delegate = self;
+    fartPicker.delegate = self;
+}
+
+
 #pragma mark -
 #pragma mark GKPeerPickerControllerDelegate
 
@@ -243,39 +218,10 @@ static char text[256] = "Hi";
     [whatDidIget release];
 }
 
-#pragma mark -
-#pragma mark GKSessionDelegate
-
-- (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state{
-    
-    if(state == GKPeerStateConnected){
-        // Add the peer to the Array
-        [fartPeers addObject:peerID];
-        
-        NSString *str = [NSString stringWithFormat:@"Connected with %@",[session displayNameForPeer:peerID]];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Connected" message:str delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        
-        // Used to acknowledge that we will be sending data
-        [session setDataReceiveHandler:self withContext:nil];
-        
-        [[self.view viewWithTag:12] removeFromSuperview];
-        
-        UIButton *btnLoudFart = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [btnLoudFart addTarget:self action:@selector(sendALoudFart:) forControlEvents:UIControlEventTouchUpInside];
-        [btnLoudFart setTitle:@"Loud Fart" forState:UIControlStateNormal];
-        btnLoudFart.frame = CGRectMake(20, 150, 280, 30);
-        btnLoudFart.tag = 13;
-        [self.view addSubview:btnLoudFart];
-        
-        UIButton *btnSilentFart = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [btnSilentFart addTarget:self action:@selector(sendASilentAssassin:) forControlEvents:UIControlEventTouchUpInside];
-        [btnSilentFart setTitle:@"Silent Assassin" forState:UIControlStateNormal];
-        btnSilentFart.frame = CGRectMake(20, 200, 280, 30);
-        btnSilentFart.tag = 14;
-        [self.view addSubview:btnSilentFart];
-    }
-    
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
+
 @end

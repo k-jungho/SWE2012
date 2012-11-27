@@ -19,7 +19,5 @@
 @property (retain) GKSession *fartSession;
 
 - (void) connectToPeers:(id) sender;
-- (void) sendALoudFart:(id) sender;
-- (void) sendASilentAssassin:(id) sender;
 
 @end

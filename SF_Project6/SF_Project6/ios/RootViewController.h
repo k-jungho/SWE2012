@@ -19,14 +19,17 @@ enum __transactionState{
 
 typedef enum __transactionState _transactionState;
 
-@interface RootViewController : UIViewController <SpeechKitDelegate, SKRecognizerDelegate, UITextFieldDelegate, GKSessionDelegate, GKPeerPickerControllerDelegate> {
-    
+@interface RootViewController : UIViewController <SpeechKitDelegate, SKRecognizerDelegate, UITextFieldDelegate, GKSessionDelegate, GKPeerPickerControllerDelegate>
+{
     SKRecognizer* voiceSearch;
-    
+
     GKSession *fartSession;
     GKPeerPickerController *fartPicker;
     NSMutableArray *fartPeers;
 }
+
+- (void) sendALoudFart:(id) sender;
+- (void) setConnectionVaries:(GKSession*)session second:(GKPeerPickerController*)picker third:(NSMutableArray*)peers;
 
 + (void)startRecognition;
 + (void)initialize;
@@ -34,5 +37,6 @@ typedef enum __transactionState _transactionState;
 
 @property(readonly)     SKRecognizer    *voiceSearch;
 @property(retain)       GKSession       *fartSession;
+@property(retain)       NSMutableArray  *fartPeers;
 
 @end
