@@ -21,15 +21,13 @@
     //move enemy to new position
     
     switch (flag) {
-        case START:
-            //timer start
+        case PROTOCOL_START:
             break;
-        case SHOT:
-            //give velocity, draw missile
-        case END:
-            //timer end
+        case PROTOCOL_END:
             break;
-        default:
+        case PROTOCOL_SYNC:
+            break;
+        case PROTOCOL_SHOT:
             break;
     }
 }
@@ -39,8 +37,10 @@
     Byte buffer[34];
     buffer[0] = (Byte)flag;
     
-    memcpy(buffer+1, &position, sizeof(SF_vector));
-    memcpy(buffer+1+sizeof(SF_vector), &velocity, sizeof(SF_vector));
+    memcpy(buffer+1+0*sizeof(double), &position.x, sizeof(double));
+    memcpy(buffer+1+1*sizeof(double), &position.y, sizeof(double));
+    memcpy(buffer+1+2*sizeof(double), &velocity.x, sizeof(double));
+    memcpy(buffer+1+3*sizeof(double), &velocity.y, sizeof(double));
     
     NSData* packet = [NSData dataWithBytes:buffer length:sizeof(buffer)];
     [packet getBytes:buffer];
@@ -53,7 +53,6 @@
     NSData* packet = [self MakePacket:flag :position :velocity];
     
     [pRootViewController.fartSession sendData:packet toPeers:pRootViewController.fartPeers withDataMode:GKSendDataReliable error:nil];
-
 }
 
 @end

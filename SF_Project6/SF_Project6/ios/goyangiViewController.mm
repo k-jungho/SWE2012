@@ -136,6 +136,7 @@
         btnLoudFart.tag = 13;
         [self.view addSubview:btnLoudFart];
         
+        [pRootViewController setConnectionVaries:fartSession second:fartPicker third:fartPeers];
         
         if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
         {

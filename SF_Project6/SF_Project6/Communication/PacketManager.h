@@ -9,9 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SF_Object.h"
 
-#define START   4
-#define END     2
-#define SHOT    1
+enum GAME_PROTOCOL { PROTOCOL_START, PROTOCOL_END, PROTOCOL_SYNC, PROTOCOL_SHOT };
 
 @interface PacketManager : NSObject
 {

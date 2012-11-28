@@ -15,6 +15,9 @@
 typedef struct SF_vector{
     double x;
     double y;
+    SF_vector() {}
+    SF_vector(double _x, double _y) : x(_x), y(_y) {}
+    
 }SF_vector;
 
 class SF_Object{
