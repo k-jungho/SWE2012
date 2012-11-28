@@ -19,5 +19,7 @@
 @property (retain) GKSession *fartSession;
 
 - (void) connectToPeers:(id) sender;
+- (void) goTestPage:(id) sender;
+
 
 @end

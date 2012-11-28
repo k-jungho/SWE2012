@@ -32,6 +32,7 @@ typedef enum __transactionState _transactionState;
 - (void) setConnectionVaries:(GKSession*)session second:(GKPeerPickerController*)picker third:(NSMutableArray*)peers;
 
 + (void)startRecognition;
++ (void)endRecognition;
 + (void)initialize;
 + (char *)getResponse;
 

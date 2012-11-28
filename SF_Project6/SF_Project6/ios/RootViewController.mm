@@ -114,6 +114,11 @@ static char text[256] = "Hi";
     }
 }
 
++ (void)endRecognition {
+    [pRootViewController->voiceSearch stopRecording];
+    transactionState = TS_IDLE;
+}
+
 + (char *)getResponse {
     return text;
 }
@@ -123,7 +128,7 @@ static char text[256] = "Hi";
     NSLog(@"Recording started.");
     
     transactionState = TS_RECORDING;
-    memcpy(text, [@"Recording..." UTF8String], 256);
+    //memcpy(text, [@"Recording..." UTF8String], 256);
 }
 
 - (void)recognizerDidFinishRecording:(SKRecognizer *)recognizer
@@ -132,7 +137,7 @@ static char text[256] = "Hi";
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     transactionState = TS_PROCESSING;
-    memcpy(text, [@"Processing..." UTF8String], 256);
+    //memcpy(text, [@"Processing..." UTF8String], 256);
 }
 
 - (void)recognizer:(SKRecognizer *)recognizer didFinishWithResults:(SKRecognition *)results
@@ -144,7 +149,8 @@ static char text[256] = "Hi";
     
     transactionState = TS_IDLE;
     
-    memcpy(text, [[results firstResult] UTF8String], 256);
+    if( [results firstResult] )
+        memcpy(text, [[results firstResult] UTF8String], 256);
     
 	[voiceSearch release];
 	voiceSearch = nil;

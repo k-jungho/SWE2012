@@ -44,18 +44,43 @@
     fartPicker.connectionTypesMask = GKPeerPickerConnectionTypeNearby;
     fartPeers=[[NSMutableArray alloc] init];
     
+    self.view.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"background.png"]];
+    
     // Create the buttons
-    UIButton *btnConnect = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton *btnConnect = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnConnect addTarget:self action:@selector(connectToPeers:) forControlEvents:UIControlEventTouchUpInside];
-    [btnConnect setTitle:@"Connect" forState:UIControlStateNormal];
-    btnConnect.frame = CGRectMake(20, 100, 280, 30);
+    [btnConnect setImage:[UIImage imageNamed:@"Bluetooth.png"] forState:UIControlStateNormal];
+    //[btnConnect setTitle:@"Connect" forState:UIControlStateNormal];
+    btnConnect.frame = CGRectMake(397, 269, 231, 231);
     btnConnect.tag = 12;
     [self.view addSubview:btnConnect];
+    
+    UIButton *btnTest = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btnTest addTarget:self action:@selector(goTestPage:) forControlEvents:UIControlEventTouchUpInside];
+    [btnTest setImage:[UIImage imageNamed:@"Fighter.png"] forState:UIControlStateNormal];
+    btnTest.frame = CGRectMake(896, 640, 128, 128);
+    [self.view addSubview:btnTest];
 }
 
 // Connect to other peers by displayign the GKPeerPicker
 - (void) connectToPeers:(id) sender{
     [fartPicker show];
+}
+
+- (void) goTestPage:(id) sender
+{
+    if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
+    {
+        // warning: addSubView doesn't work on iOS6
+        [self.view removeFromSuperview];
+    }
+    else
+    {
+        // use this method on ios6
+        [pWindow setRootViewController:(UIViewController*)pRootViewController];
+    }
+    
+    cocos2d::CCApplication::sharedApplication().run();
 }
 
 - (void)dealloc {

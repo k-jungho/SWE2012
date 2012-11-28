@@ -50,6 +50,10 @@ static AppDelegate s_sharedApplication;
     
     viewConnect = [[GoyangiViewController alloc] initWithNibName:nil bundle:nil];
     
+    CGAffineTransform landscapeTransform = CGAffineTransformMakeRotation(1.57079633);
+    landscapeTransform = CGAffineTransformTranslate (landscapeTransform, +0.0, +0.0);
+    [viewConnect.view setTransform:landscapeTransform];
+    
     // Set RootViewController to window
     if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
     {

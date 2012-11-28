@@ -2,6 +2,7 @@
 #include "SF_Scene.h"
 #include "SimpleAudioEngine.h"
 #include "PacketManager.h"
+#include "RecognitionAnalyzer.h"
 #include <math.h>
 
 using namespace cocos2d;
@@ -42,31 +43,34 @@ bool SF_Scene::init()
 	// 3. add your codes below...
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //모드 선택
-    player_num=-1;
-    wait_backgroud = CCSprite::spriteWithFile("하늘.jpg");
-    winSize = CCDirector::sharedDirector()->getWinSize();
-	// position the sprite on the center of the screen
-	wait_backgroud->setScaleX(winSize.width/wait_backgroud->getContentSize().width);
-    wait_backgroud->setScaleY(winSize.height/wait_backgroud->getContentSize().height);
-    wait_backgroud->setPosition( ccp(winSize.width/2, winSize.height/2) );
-    // add the sprite as a child to this layer
-	this->addChild(wait_backgroud, 0);
+//    player_num=-1;
+//    wait_backgroud = CCSprite::spriteWithFile("하늘.jpg");
+//    winSize = CCDirector::sharedDirector()->getWinSize();
+//	// position the sprite on the center of the screen
+//	wait_backgroud->setScaleX(winSize.width/wait_backgroud->getContentSize().width);
+//    wait_backgroud->setScaleY(winSize.height/wait_backgroud->getContentSize().height);
+//    wait_backgroud->setPosition( ccp(winSize.width/2, winSize.height/2) );
+//    // add the sprite as a child to this layer
+//	this->addChild(wait_backgroud, 0);
+//    
+//    CCMenuItemImage *Player1 = CCMenuItemImage::itemFromNormalImage("player1.png", NULL, this, menu_selector(SF_Scene::select1) );
+//	Player1->setPosition( ccp(winSize.width/4, winSize.height/2) );
+//    
+//	// create menu, it's an autorelease object
+//	pMenu1 = CCMenu::menuWithItems(Player1, NULL);
+//	pMenu1->setPosition( CCPointZero );
+//	this->addChild(pMenu1, 1);  
+//    
+//    CCMenuItemImage *Player2 = CCMenuItemImage::itemFromNormalImage("player2.png", NULL, this, menu_selector(SF_Scene::select2) );
+//	Player2->setPosition( ccp(winSize.width/4*3, winSize.height/2) );
+//    
+//	// create menu, it's an autorelease object
+//	pMenu2 = CCMenu::menuWithItems(Player2, NULL);
+//	pMenu2->setPosition( CCPointZero );
+//	this->addChild(pMenu2, 1);
     
-    CCMenuItemImage *Player1 = CCMenuItemImage::itemFromNormalImage("player1.png", NULL, this, menu_selector(SF_Scene::select1) );
-	Player1->setPosition( ccp(winSize.width/4, winSize.height/2) );
-    
-	// create menu, it's an autorelease object
-	pMenu1 = CCMenu::menuWithItems(Player1, NULL);
-	pMenu1->setPosition( CCPointZero );
-	this->addChild(pMenu1, 1);  
-    
-    CCMenuItemImage *Player2 = CCMenuItemImage::itemFromNormalImage("player2.png", NULL, this, menu_selector(SF_Scene::select2) );
-	Player2->setPosition( ccp(winSize.width/4*3, winSize.height/2) );
-    
-	// create menu, it's an autorelease object
-	pMenu2 = CCMenu::menuWithItems(Player2, NULL);
-	pMenu2->setPosition( CCPointZero );
-	this->addChild(pMenu2, 1);
+    select1(this);
+    RecognitionAnalyzer::startRecognition();
     
     //파워바 방향 설정
     Powerbar_Direction=true;
@@ -206,6 +210,11 @@ void SF_Scene::frame(float dt)
                 if(present_turn == player_num)
                 {
                     //~~.sendpacket(4, ~~);
+                    RecognitionAnalyzer::startRecognition();
+                }
+                else
+                {
+                    RecognitionAnalyzer::endRecognition();
                 }
                 count_frame = 0;
                 check_shoot=false;
@@ -218,6 +227,10 @@ void SF_Scene::frame(float dt)
             check_END=true;
         }
     }
+    
+    if( RecognitionAnalyzer::getResponseFromView() != RESPONSE_NONE )
+        menuShootCallback(this);
+    
 }
 
 void SF_Scene::didAccelerate(CCAcceleration* pAccelerationValue)
