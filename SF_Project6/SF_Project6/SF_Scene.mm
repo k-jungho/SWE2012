@@ -3,7 +3,7 @@
 #include "SimpleAudioEngine.h"
 #include "PacketManager.h"
 #include "RecognitionAnalyzer.h"
-#include <math.h>
+#include <math.h> 
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -78,6 +78,9 @@ bool SF_Scene::init()
     present_turn=1;
     //게임의 종료 여부
     check_END=false;
+    //각도부분 초기화
+    target_angle=0;
+    
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 	return true;
@@ -108,6 +111,7 @@ void SF_Scene::frame(float dt)
         if(player_num==1){
             //파워게이지를 움직임
             Move_Powerbar();
+            this->setIsTouchEnabled(true);
         }else if(player_num==2){
             
         }
@@ -124,6 +128,7 @@ void SF_Scene::frame(float dt)
         }else if(player_num==2){
             //파워게이지를 움직임
             Move_Powerbar();
+            this->setIsTouchEnabled(true);
         }
     }
     //포탄에 따라 레이어를 한번 더 추가로 변경
@@ -138,7 +143,9 @@ void SF_Scene::frame(float dt)
     MiniMap_dot();
     //HP그리기
     Draw_HPbar();
-    
+    //각도계를 움직임
+    Move_angle();
+        
     pFighter->setPosition(ccp(Fighter_position.x-Layer_operator,Fighter_position.y));
     pEnemy->setPosition(ccp(Enemy_position.x-Layer_operator,Enemy_position.y));
     //////////////////////////////////////////////////////////////////////////////
@@ -202,10 +209,11 @@ void SF_Scene::frame(float dt)
                 }
             }
         }else if(present_turn==-1 || present_turn==-2){
-            if(count_frame >=1){//나중에 상대방 시작패킷 받으면 시작하는걸로 바꿔
+            Enemy.Set_velocity(0, 0);
+            Fighter.Set_velocity(0, 0);
+            this->setIsTouchEnabled(false);
+            if(count_frame >=2){//나중에 상대방 시작패킷 받으면 시작하는걸로 바꿔
                 present_turn += 3;
-                Enemy.Set_velocity(0, 0);
-                Fighter.Set_velocity(0, 0);
             
                 if(present_turn == player_num)
                 {
@@ -228,8 +236,14 @@ void SF_Scene::frame(float dt)
         }
     }
     
-    if( RecognitionAnalyzer::getResponseFromView() != RESPONSE_NONE )
+    if( (voice_type = RecognitionAnalyzer::getResponseFromView()) != RESPONSE_NONE ){
         menuShootCallback(this);
+        
+        //voice_type에 따라 메소드 호출
+        /*switch(voice_type){
+                
+        }*/
+    }
     
 }
 
@@ -237,13 +251,13 @@ void SF_Scene::didAccelerate(CCAcceleration* pAccelerationValue)
 {
     if(present_turn==1){
         if(player_num==1){
-            Fighter.Add_velocity(pAccelerationValue->x,0 );
-            Fighter.Add_angle(pAccelerationValue->y);
+            Fighter.Add_velocity(pAccelerationValue->x, 0);
+            //Fighter.Add_angle(pAccelerationValue->y);
         }
     }else if(present_turn==2){
         if(player_num==2){
             Enemy.Add_velocity(pAccelerationValue->x,0 );
-            Enemy.Add_angle(-(pAccelerationValue->y));
+            //Enemy.Add_angle(-(pAccelerationValue->y));
         }
     }
 }
@@ -282,11 +296,6 @@ void SF_Scene::menuShootCallback(CCObject* pSender) //버튼 입력시 미사일
             CCSize minimap_size = pMiniMap->getContentSize();
             CCPoint minimap_position = pMiniMap->getPosition();
             SF_vector Missile_pos = Missile.Get_position();
-        
-            char c[32];
-            sprintf( c, "%f %f", minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,minimap_position.y-40);
-            pLabel->setString(c);
-            pLabel->setPosition( ccp(winSize.width / 2, winSize.height - 20) );
             
             pYellowdot=CCSprite::spriteWithFile("Yellow_dot.png");
             pYellowdot->setOpacity(180);
@@ -432,6 +441,24 @@ void SF_Scene::setting_scene(){
     pCheckbar->setPosition( ccp(200-120,winSize.height-60));
     this->addChild(pCheckbar,1);
     
+    //아이템 셋팅
+    pItem_Heal = CCSprite::spriteWithFile("Item_Heal.png");
+    //pItem_Heal->setOpacity(200);
+    //pItem_Heal->setScaleX(0.5);
+    //pItem_Heal->setScaleY(0.5);
+    pItem_Heal->setPosition(ccp(80,winSize.height-140));
+    this->addChild(pItem_Heal,2);
+    
+    pItem_double = CCSprite::spriteWithFile("x2.png");
+    //pItem_double->setScale(0.5);
+    pItem_double->setPosition(ccp(160,winSize.height-140));
+    this->addChild(pItem_double,2);
+    
+    pItem_teleport = CCSprite::spriteWithFile("Item_teleport.png");
+    //pItem_double->setScale(0.5);
+    pItem_teleport->setPosition(ccp(240,winSize.height-140));
+    this->addChild(pItem_teleport,2);
+    
     //프레임 수를 세기 위해 초기화
     count_frame=0;
     //미사일 발사 여부 초기화
@@ -439,6 +466,7 @@ void SF_Scene::setting_scene(){
     
     setIsAccelerometerEnabled(true);
     
+    this->setIsTouchEnabled(true);
     schedule(schedule_selector(SF_Scene::frame), 1.f/60);
 }
 
@@ -554,6 +582,7 @@ void SF_Scene::Game_END(){
     //this->removeChild(pReddot, true);
     //this->removeChild(pGreendot, true);
     this->removeAllChildrenWithCleanup(true);
+    this->setIsTouchEnabled(false);
     
     if(player_num==1){
         if(Fighter.Get_HP()>0){
@@ -592,4 +621,97 @@ void SF_Scene::Game_END(){
             this->addChild(wait_backgroud, 0);
         }
     }
+}
+
+void SF_Scene::registerWithTouchDispatcher(){
+    CCTouchDispatcher::sharedDispatcher()->addTargetedDelegate(this, 0, true);
+}
+
+void SF_Scene::ccTouchMoved(CCTouch* touch, UIEvent* event){
+    CCPoint touchLocation = touch->locationInView( touch->view());
+    CCPoint pos = CCDirector::sharedDirector()->convertToGL(touchLocation);
+}
+
+void SF_Scene::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent){
+    CCPoint touchLocation = pTouch->locationInView( pTouch->view());
+    CCPoint pos = CCDirector::sharedDirector()->convertToGL(touchLocation);
+    CCPoint target_vector;
+    SF_vector player_pos;
+    
+    if(player_num==1){
+        player_pos=Fighter.Get_position();
+    }else if(player_num==2){
+        player_pos=Enemy.Get_position();
+    }
+    player_pos.x-=Layer_operator;
+    target_vector.x=pos.x-player_pos.x;
+    target_vector.y=pos.y-player_pos.y;
+    target_angle=acos(target_vector.x/sqrt(target_vector.x*target_vector.x+target_vector.y*target_vector.y));
+    target_angle *= target_vector.y<0?-1:1;
+    target_angle=target_angle/PI*180;
+    if(target_angle<0)
+        target_angle+=360;
+}
+
+bool SF_Scene::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent){
+    CCPoint touchLocation = pTouch->locationInView( pTouch->view());
+    CCPoint pos = CCDirector::sharedDirector()->convertToGL(touchLocation);
+    CCPoint target_vector;
+    SF_vector player_pos;
+    double vector_length=sqrt(target_vector.x*target_vector.x+target_vector.y*target_vector.y);
+    
+    if(player_num==1){
+        player_pos=Fighter.Get_position();
+    }else if(player_num==2){
+        player_pos=Enemy.Get_position();
+    }
+    player_pos.x-=Layer_operator;
+    target_vector.x=pos.x-player_pos.x;
+    target_vector.y=pos.y-player_pos.y;
+    target_angle=acos(target_vector.x/vector_length);
+    
+    target_angle *= target_vector.y<0?-1:1;
+    target_angle=target_angle/PI*180;
+    if(target_angle<0)
+        target_angle+=360;
+    
+    return true;
+}
+
+void SF_Scene::Move_angle(){
+    double present_angle;
+    double gap;
+    
+    if(player_num==present_turn){
+        if(player_num==1){
+            present_angle=Fighter.Get_angle();
+            
+            //감는 방향 설정
+            gap=target_angle-present_angle/PI*180;
+            if(gap>=2 || gap< -2){
+                if(gap<=180 && gap > 0){
+                    Fighter.Add_angle((double)1);
+                }else if(gap<=0 && gap>=-180){
+                    Fighter.Add_angle((double)-1);
+                }
+            }
+        }else if(player_num==2){
+            present_angle=Enemy.Get_angle();
+            
+            //감는 방향 설정
+            gap=target_angle-present_angle/PI*180;
+            if(gap>=2 || gap< -2){
+                if(gap <= 180){
+                    Enemy.Add_angle((double)1);
+                }else{
+                    Enemy.Add_angle((double)-1);
+                }
+            }
+        }
+    }
+    
+    char c[32];
+    sprintf( c, "%f %f", present_angle, target_angle);
+    pLabel->setString(c);
+    pLabel->setPosition( ccp(winSize.width / 2, winSize.height - 20) );
 }

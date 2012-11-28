@@ -10,13 +10,14 @@
 #define SF_Project6_SF_Shield_Item_h
 
 #include "SF_Item.h"
+#include <time.h>
 
 class SF_Shield_Item : public SF_Item
 {
 private:
     
 public:
-    
+    int Random_Heal();
 };
 
 #endif

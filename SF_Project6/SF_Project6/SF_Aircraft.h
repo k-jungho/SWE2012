@@ -17,18 +17,20 @@
 class SF_Aircraft : public SF_Object
 {
 private:
-    SF_vector velocity;
     double Angle;
+    SF_vector velocity;
     int HP;
     
 public:
     void Init_Aircraft(double x, double y);
-    void Set_angle(double y);
-    void Add_velocity(double x, double y);
     void Set_velocity(double x, double y);
+    void Add_velocity(double x, double y);
+    //void Add_position(double x, double y);
+    void Set_angle(double y);
     void Add_angle(double x);
     void Aircraft_Move(cocos2d::CCSize winSize);
     void Sub_HP(int demage);
+    void ADD_HP(int Heal);
     double Get_angle();
     int Get_HP();
 };

@@ -3,8 +3,9 @@
 #include "cocos2d.h"
 #include "SF_Aircraft.h"
 #include "SF_Missile.h"
-
-
+#include "SF_Item.h"
+#include "SF_Shield_Item.h"
+#include <math.h>
 
 #define MAX_SHOOT_POWER 40
 
@@ -52,6 +53,8 @@ public:
     int player_num;
     int present_turn;
     int Layer_operator;
+    int voice_type;
+    double target_angle; //360도법, 터치에 의해 생성된 목표가 되는 각도
     
     //미사일 관련
     cocos2d::CCSprite* pMissile;
@@ -75,6 +78,21 @@ public:
     void Write_Time();
     void Check_hit();
     void Game_END();
+    
+    //아이템 관
+    cocos2d::CCSprite* pItem_Heal;
+    cocos2d::CCSprite* pItem_double;
+    cocos2d::CCSprite* pItem_teleport;
+    SF_Shield_Item Item_Heal;
+    
+    //터치터치
+    void registerWithTouchDispatcher();
+    void ccTouchMoved(cocos2d::CCTouch* touch, UIEvent* event );
+    bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+    void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+    
+    //매 프레임 각도를 타겟에 맞추어 바꿔줄 함수
+    void Move_angle();
     
 private:
     float prev_elapsedTime;

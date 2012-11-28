@@ -10,14 +10,15 @@
 #define SF_Project6_SF_Item_h
 
 #include "SF_Object.h"
+#include <time.h>
 
 class SF_Item : public SF_Object
 {
 private:
-    double Cool_time;
+    bool check;
     
 public:
-    
+    void Init_Item();
 };
 
 

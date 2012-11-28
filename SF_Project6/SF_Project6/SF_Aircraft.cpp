@@ -19,6 +19,10 @@ void SF_Aircraft::Init_Aircraft(double x, double y){
 
 void SF_Aircraft::Add_velocity(double x, double y){
     velocity.x+=x*0.3;
+    
+    if(0.1>=x && x>=-0.1)
+        velocity.x=0;
+    
     velocity.y+=y;
 }
 
@@ -33,8 +37,8 @@ void SF_Aircraft::Aircraft_Move(cocos2d::CCSize winSize){
     //화면 밖으로 안나가게 고정 벽에 닿을 경우 속도 반전
     if(temp_position.x<50){
         temp_position.x=50;
-        Set_velocity(-velocity.x*ELASTICITY, velocity.y);
-        //Set_velocity(0, velocity.y);
+        //Set_velocity(-velocity.x*ELASTICITY, velocity.y);
+        Set_velocity(0, velocity.y);
     }
     if(temp_position.y<86*2){
         temp_position.y=86*2;
@@ -46,7 +50,8 @@ void SF_Aircraft::Aircraft_Move(cocos2d::CCSize winSize){
     }
     if(temp_position.y > (winSize.height-50)){
         temp_position.y=winSize.height-50;
-        Set_velocity(velocity.x,-velocity.y*ELASTICITY);
+        //Set_velocity(velocity.x,-velocity.y*ELASTICITY);
+        Set_velocity(0, velocity.y);
     }
     
     SF_Object::Set_Position(temp_position.x, temp_position.y);
@@ -82,3 +87,18 @@ int SF_Aircraft::Get_HP(){
 void SF_Aircraft::Sub_HP(int demage){
     HP-=demage;
 }
+
+void SF_Aircraft::ADD_HP(int Heal){
+    if((HP+Heal)>=100)
+        HP=100;
+    else
+        HP+=Heal;
+}
+
+/*void SF_Aircraft::Add_position(double x, double y){
+    double x_pos;
+    x_pos=Get_position().x;
+    x_pos+=((double)30*x);
+    Set_Position(x_pos, Get_position().y);
+    //position+=y;
+}*/

@@ -8,3 +8,9 @@
 
 #include <iostream>
 #include "SF_Item.h"
+
+void SF_Item::Init_Item(){
+    srand(time(NULL));
+    
+    check=false;
+}

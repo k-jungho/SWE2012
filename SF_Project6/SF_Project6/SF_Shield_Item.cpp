@@ -8,3 +8,11 @@
 
 #include <iostream>
 #include "SF_Shield_Item.h"
+
+int SF_Shield_Item::Random_Heal(){
+    int temp;
+    temp=rand();
+    temp=20+temp%20;
+    
+    return temp;
+}
