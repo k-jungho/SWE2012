@@ -8,6 +8,8 @@
 using namespace cocos2d;
 using namespace CocosDenshion;
 
+SF_Scene* pScene = NULL;
+
 CCScene* SF_Scene::scene()
 {
 	// 'scene' is an autorelease object
@@ -18,6 +20,7 @@ CCScene* SF_Scene::scene()
     
 	// add layer as a child to scene
 	scene->addChild(layer);
+    pScene = layer;
     
 	// return the scene
 	return scene;
@@ -69,8 +72,17 @@ bool SF_Scene::init()
 //	pMenu2->setPosition( CCPointZero );
 //	this->addChild(pMenu2, 1);
     
-    select1(this);
+    if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
+    {
+        select1(this);
+    }
+    else
+    {
+        // use this method on ios6
+        select2(this);
+    }
     RecognitionAnalyzer::startRecognition();
+
     
     //파워바 방향 설정
     Powerbar_Direction=true;
@@ -236,6 +248,15 @@ void SF_Scene::frame(float dt)
         }
     }
     
+    if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
+    {
+        [PacketManager SendPacket:PROTOCOL_SYNC pos:Fighter.Get_position() vel:Fighter.Get_position()];
+    }
+    else
+    {
+        [PacketManager SendPacket:PROTOCOL_SYNC pos:Enemy.Get_position() vel:Enemy.Get_position()];
+    }
+    
     if( (voice_type = RecognitionAnalyzer::getResponseFromView()) != RESPONSE_NONE ){
         menuShootCallback(this);
         
@@ -309,12 +330,14 @@ void SF_Scene::select1(CCObject* pSender){
     player_num=1;
     Fighter.Set_angle(0);
     setting_scene();
+    [PacketManager SendPacket:PROTOCOL_SYNC pos:Fighter.Get_position() vel:Fighter.Get_position()];
 }
 
 void SF_Scene::select2(CCObject* pSender){
     player_num=2;
     Enemy.Set_angle(PI);
     setting_scene();
+    [PacketManager SendPacket:PROTOCOL_SYNC pos:Enemy.Get_position() vel:Enemy.Get_position()];
 }
 
 void SF_Scene::setting_scene(){
@@ -714,4 +737,36 @@ void SF_Scene::Move_angle(){
     sprintf( c, "%f %f", present_angle, target_angle);
     pLabel->setString(c);
     pLabel->setPosition( ccp(winSize.width / 2, winSize.height - 20) );
+}
+
+void SF_Scene::receiveData(NSData * data)
+{
+    SF_vector position, velocity;
+    Byte* buffer = (Byte*) [data bytes];
+    
+    memcpy(&position.x, buffer+1+0*sizeof(double), sizeof(double));
+    memcpy(&position.y, buffer+1+1*sizeof(double), sizeof(double));
+    memcpy(&velocity.x, buffer+1+2*sizeof(double), sizeof(double));
+    memcpy(&velocity.y, buffer+1+3*sizeof(double), sizeof(double));
+    
+    switch (buffer[0]) {
+        case PROTOCOL_START:
+            break;
+        case PROTOCOL_END:
+            break;
+        case PROTOCOL_SYNC:
+            if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
+            {
+                Enemy.Set_Position(position.x, position.y);
+            }
+            else
+            {
+                Fighter.Set_Position(position.x, position.y);
+            }
+            
+            break;
+        case PROTOCOL_SHOT:
+            break;
+    }
+    CCLog("receive : %f, %f, %f, %f", position.x, position.y, velocity.x, velocity.y);
 }

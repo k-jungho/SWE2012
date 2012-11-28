@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56C233DB16665E0D00387268 /* game_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 56C233DA16665E0D00387268 /* game_icon.png */; };
 		56EF75F0166297D300E8DF87 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF75EF166297D300E8DF87 /* SpeechKit.framework */; };
 		56EF75F3166297F700E8DF87 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF75F2166297F700E8DF87 /* CFNetwork.framework */; };
 		56EF75F5166297FF00E8DF87 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF75F4166297FF00E8DF87 /* Security.framework */; };
@@ -185,6 +186,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		56C233DA16665E0D00387268 /* game_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = game_icon.png; sourceTree = "<group>"; };
 		56EF75EF166297D300E8DF87 /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpeechKit.framework; path = SF_Project6/SpeechKit.framework; sourceTree = "<group>"; };
 		56EF75F2166297F700E8DF87 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		56EF75F4166297FF00E8DF87 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -545,6 +547,7 @@
 		8117E07D163947E800DD9D67 = {
 			isa = PBXGroup;
 			children = (
+				56C233DA16665E0D00387268 /* game_icon.png */,
 				56EF761F166511E000E8DF87 /* Default-Landscape~ipad.png */,
 				8117E08B163947E900DD9D67 /* Frameworks */,
 				8117E089163947E900DD9D67 /* Products */,
@@ -1257,6 +1260,7 @@
 				8183CCEA166613B700147DF1 /* x2.png in Resources */,
 				8183CCEC166618BA00147DF1 /* Item_teleport.png in Resources */,
 				8183CCEE16661F3400147DF1 /* bullet-blue.png in Resources */,
+				56C233DB16665E0D00387268 /* game_icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1468,7 +1472,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1494,7 +1498,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

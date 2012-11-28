@@ -94,8 +94,12 @@ public:
     //매 프레임 각도를 타겟에 맞추어 바꿔줄 함수
     void Move_angle();
     
+    void receiveData(NSData * data);
+    
 private:
     float prev_elapsedTime;
 };
+
+extern SF_Scene* pScene;
 
 #endif
