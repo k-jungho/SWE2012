@@ -29,6 +29,12 @@
             break;
         case PROTOCOL_SHOT:
             break;
+        case PROTOCOL_HIT:
+            break;
+        case PROTOCOL_DOUBLE:
+            break;
+        case PROTOCOL_HEAL:
+            break;
     }
 }
 

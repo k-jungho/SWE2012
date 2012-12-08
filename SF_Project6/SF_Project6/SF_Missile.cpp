@@ -51,3 +51,11 @@ bool SF_Missile::Check_EndMissile(cocos2d::CCSize winSize){
     
     return false;
 }
+
+void SF_Missile::Set_who(int i){
+    who=i;
+}
+
+int SF_Missile::Get_who(){
+    return who;
+}

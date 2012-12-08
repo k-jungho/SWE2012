@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		56C233DB16665E0D00387268 /* game_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 56C233DA16665E0D00387268 /* game_icon.png */; };
+		56C233E2166FBB4B00387268 /* bomb.wav in Resources */ = {isa = PBXBuildFile; fileRef = 56C233E0166FBB4B00387268 /* bomb.wav */; };
+		56C233E3166FBB4B00387268 /* horn.wav in Resources */ = {isa = PBXBuildFile; fileRef = 56C233E1166FBB4B00387268 /* horn.wav */; };
 		56EF75F0166297D300E8DF87 /* SpeechKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF75EF166297D300E8DF87 /* SpeechKit.framework */; };
 		56EF75F3166297F700E8DF87 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF75F2166297F700E8DF87 /* CFNetwork.framework */; };
 		56EF75F5166297FF00E8DF87 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF75F4166297FF00E8DF87 /* Security.framework */; };
@@ -187,6 +189,8 @@
 
 /* Begin PBXFileReference section */
 		56C233DA16665E0D00387268 /* game_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = game_icon.png; sourceTree = "<group>"; };
+		56C233E0166FBB4B00387268 /* bomb.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = bomb.wav; path = Resources/bomb.wav; sourceTree = "<group>"; };
+		56C233E1166FBB4B00387268 /* horn.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = horn.wav; path = Resources/horn.wav; sourceTree = "<group>"; };
 		56EF75EF166297D300E8DF87 /* SpeechKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpeechKit.framework; path = SF_Project6/SpeechKit.framework; sourceTree = "<group>"; };
 		56EF75F2166297F700E8DF87 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		56EF75F4166297FF00E8DF87 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -598,6 +602,8 @@
 		8117E09D163947E900DD9D67 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				56C233E0166FBB4B00387268 /* bomb.wav */,
+				56C233E1166FBB4B00387268 /* horn.wav */,
 				8138D312165A7D7A0037E4BD /* Arrow.png */,
 				81865707165A6435006623A4 /* player2.png */,
 				81865704165A641A006623A4 /* player1.png */,
@@ -1261,6 +1267,8 @@
 				8183CCEC166618BA00147DF1 /* Item_teleport.png in Resources */,
 				8183CCEE16661F3400147DF1 /* bullet-blue.png in Resources */,
 				56C233DB16665E0D00387268 /* game_icon.png in Resources */,
+				56C233E2166FBB4B00387268 /* bomb.wav in Resources */,
+				56C233E3166FBB4B00387268 /* horn.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

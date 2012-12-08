@@ -10,6 +10,7 @@
 #include "RootViewController.h"
 #include "cocos2d.h"
 
+static char prevResponse[256] = "";
 void RecognitionAnalyzer::startRecognition()
 {
     [RootViewController startRecognition];
@@ -22,7 +23,6 @@ void RecognitionAnalyzer::endRecognition()
 
 RESPONSE_TYPE RecognitionAnalyzer::getResponseFromView()
 {
-    static char prevResponse[256] = "";
     char* response = [RootViewController getResponse];
     
     if( strcmp(prevResponse, response) == 0 )
@@ -30,27 +30,25 @@ RESPONSE_TYPE RecognitionAnalyzer::getResponseFromView()
     
     strcpy(prevResponse, response);
     
+    if( strcmp(prevResponse, "start") == 0 )
+        return RESPONSE_NONE;
+    
+    if( strcmp(prevResponse, "Processing") == 0 )
+        return RESPONSE_PROCESSING;
+    
     //NSLog(@"[%s]",response);
     cocos2d::CCLog("RecognitionAnalyzer::getResponseFromView : %s", response);
     
     if( strcmp(response, "미사일" ) == 0 )
     {
-        return RESPONSE_MISSILE2;
+        return RESPONSE_DOUBLE;
     }
-    else if( strcmp(response, "유도탄" ) == 0 )
-    {
-        return RESPONSE_MISSILE3;
-    }
-//    else if( strcmp(response, "박" ) == 0 )
-//    {
-//        return RESPONSE_MISSILE3;
-//    }
-    else if( strcmp(response, "회복" ) == 0 )
+    else if( strcmp(response, "치료" ) == 0 )
     {
         return RESPONSE_MEDICINE;
     }
     else
     {
-        return RESPONSE_MISSILE1;
+        return RESPONSE_MISSILE;
     }
 }

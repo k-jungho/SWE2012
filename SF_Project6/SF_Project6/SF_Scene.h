@@ -61,6 +61,7 @@ public:
     SF_Missile Missile;
     bool check_shoot;
     bool check_END;
+    bool Move_bar;
     
     virtual void didAccelerate(cocos2d::CCAcceleration* pAccelerationValue);
     void setting_scene();
@@ -82,8 +83,10 @@ public:
     //아이템 관
     cocos2d::CCSprite* pItem_Heal;
     cocos2d::CCSprite* pItem_double;
-    cocos2d::CCSprite* pItem_teleport;
+    //cocos2d::CCSprite* pItem_teleport;
     SF_Shield_Item Item_Heal;
+    bool check_heal;
+    bool check_double;
     
     //터치터치
     void registerWithTouchDispatcher();

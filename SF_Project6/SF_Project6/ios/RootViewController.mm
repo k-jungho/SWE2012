@@ -47,13 +47,13 @@ static char text[256] = "Hi";
                   delegate:self];
     
     //	// Set earcons to play
-	SKEarcon* earconStart	= [SKEarcon earconWithName:@"earcon_listening.wav"];
-	SKEarcon* earconStop	= [SKEarcon earconWithName:@"earcon_done_listening.wav"];
-	SKEarcon* earconCancel	= [SKEarcon earconWithName:@"earcon_cancel.wav"];
-	
+	SKEarcon* earconStart	= [SKEarcon earconWithName:@"horn.wav"];
+	SKEarcon* earconStop	= [SKEarcon earconWithName:@"bomb.wav"];
+//	SKEarcon* earconCancel	= [SKEarcon earconWithName:@"earcon_cancel.wav"];
+//	
 	[SpeechKit setEarcon:earconStart forType:SKStartRecordingEarconType];
 	[SpeechKit setEarcon:earconStop forType:SKStopRecordingEarconType];
-	[SpeechKit setEarcon:earconCancel forType:SKCancelRecordingEarconType];
+//	[SpeechKit setEarcon:earconCancel forType:SKCancelRecordingEarconType];
 }
 
 // Override to allow orientations other than the default portrait orientation.
@@ -112,6 +112,7 @@ static char text[256] = "Hi";
         
         
         NSLog(@"[%@], [%@]", self, pRootViewController.self);
+        strcpy(text, "start");
     }
 }
 
@@ -138,7 +139,7 @@ static char text[256] = "Hi";
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     transactionState = TS_PROCESSING;
-    //memcpy(text, [@"Processing..." UTF8String], 256);
+    memcpy(text, [@"Processing" UTF8String], 256);
 }
 
 - (void)recognizer:(SKRecognizer *)recognizer didFinishWithResults:(SKRecognition *)results

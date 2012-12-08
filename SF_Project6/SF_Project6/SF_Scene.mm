@@ -75,13 +75,14 @@ bool SF_Scene::init()
     if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
     {
         select1(this);
+        RecognitionAnalyzer::startRecognition();
     }
     else
     {
         // use this method on ios6
         select2(this);
     }
-    RecognitionAnalyzer::startRecognition();
+    
 
     
     //파워바 방향 설정
@@ -122,7 +123,8 @@ void SF_Scene::frame(float dt)
         
         if(player_num==1){
             //파워게이지를 움직임
-            Move_Powerbar();
+            if(Move_bar==true)
+                Move_Powerbar();
             this->setIsTouchEnabled(true);
         }else if(player_num==2){
             
@@ -139,7 +141,8 @@ void SF_Scene::frame(float dt)
             
         }else if(player_num==2){
             //파워게이지를 움직임
-            Move_Powerbar();
+            if(Move_bar==true)
+                Move_Powerbar();
             this->setIsTouchEnabled(true);
         }
     }
@@ -172,10 +175,16 @@ void SF_Scene::frame(float dt)
             count_frame=0;
             check_shoot=false;
             this->removeChild(pYellowdot, true);
-            if(present_turn==1)
+            if(present_turn==1){
                 present_turn=-1;
-            else if(present_turn==2)
+                if(player_num==1)
+                    [PacketManager SendPacket:PROTOCOL_END pos:Missile_position vel:Missile_position];
+            }
+            else if(present_turn==2){
                 present_turn=-2;
+                if(player_num==2)
+                    [PacketManager SendPacket:PROTOCOL_END pos:Missile_position vel:Missile_position];
+            }
         }
     }
     //미사일 요격을 감지 & HP가 0이 되면 게임 종료
@@ -211,13 +220,19 @@ void SF_Scene::frame(float dt)
     }
     
     if(present_turn==1 || present_turn==2){
-        if(count_frame >= 10){
+        if(count_frame >= 20){
             if(present_turn==1){
                 count_frame=0;
                 present_turn=-1;
+                Move_bar=true;
+                if(player_num==1)
+                    [PacketManager SendPacket:PROTOCOL_END pos:Missile_position vel:Missile_position];
             }else if(present_turn==2){
                 count_frame=0;
                 present_turn=-2;
+                Move_bar=true;
+                if(player_num==2)
+                    [PacketManager SendPacket:PROTOCOL_END pos:Missile_position vel:Missile_position];
                 }
             }
         }else if(present_turn==-1 || present_turn==-2){
@@ -248,15 +263,21 @@ void SF_Scene::frame(float dt)
         }
     }
     
-    if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
-    {
-        [PacketManager SendPacket:PROTOCOL_SYNC pos:Fighter.Get_position() vel:Fighter.Get_position()];
-    }
-    else
-    {
-        [PacketManager SendPacket:PROTOCOL_SYNC pos:Enemy.Get_position() vel:Enemy.Get_position()];
-    }
+    static float syncTimer = 0.f;
+    syncTimer += dt;
     
+    if( syncTimer > 0.2f )
+    {
+        if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
+        {
+            [PacketManager SendPacket:PROTOCOL_SYNC pos:Fighter.Get_position() vel:Fighter.Get_position()];
+        }
+        else
+        {
+            [PacketManager SendPacket:PROTOCOL_SYNC pos:Enemy.Get_position() vel:Enemy.Get_position()];
+        }
+        syncTimer = 0.f;
+    }
     if( (voice_type = RecognitionAnalyzer::getResponseFromView()) != RESPONSE_NONE ){
         menuShootCallback(this);
         
@@ -285,44 +306,83 @@ void SF_Scene::didAccelerate(CCAcceleration* pAccelerationValue)
 
 void SF_Scene::menuShootCallback(CCObject* pSender) //버튼 입력시 미사일 발사
 {
-    if(player_num==present_turn){
-        if(check_shoot==false){
-            SF_vector present_position, Shoot_angle;
-            double present_angle;
-            double Shoot_power = Get_Powerposition();
+    if(voice_type==RESPONSE_PROCESSING){            //바 멈추기
+        Move_bar=false;
+    }else if(voice_type==RESPONSE_MISSILE || voice_type==RESPONSE_DOUBLE){
+        Move_bar=true;
+        if(player_num==present_turn){
+            if(check_shoot==false){
+                SF_vector present_position, Shoot_angle;
+                double present_angle;
+                double Shoot_power = Get_Powerposition();
             
-            if(present_turn==1){
-                if(player_num==1){
-                    present_position=Fighter.Get_position();
-                    present_angle=Fighter.Get_angle();
+                if(present_turn==1){
+                    if(player_num==1){
+                        present_position=Fighter.Get_position();
+                        present_angle=Fighter.Get_angle();
+                        Missile.Set_who(1);
+                    }
+                }else if(present_turn==2){
+                    if(player_num==2){
+                        present_position=Enemy.Get_position();
+                        present_angle=Enemy.Get_angle();
+                        Missile.Set_who(2);
+                    }
                 }
-            }else if(present_turn==2){
-                if(player_num==2){
-                    present_position=Enemy.Get_position();
-                    present_angle=Enemy.Get_angle();
+                Shoot_power=10+Shoot_power/8;
+                Shoot_angle.x=Shoot_power*cos(present_angle);
+                Shoot_angle.y=Shoot_power*sin(present_angle);
+            
+                pMissile=CCSprite::spriteWithFile("Bomb.png");
+                if(voice_type==RESPONSE_DOUBLE && check_double==true){
+                    Missile.Init_Missile(present_position,Shoot_angle,100);
+                }
+                else{
+                    Missile.Init_Missile(present_position,Shoot_angle,50);
+                }
+                pMissile->setPosition(ccp(present_position.x,present_position.y));
+                
+                if(voice_type==RESPONSE_DOUBLE && check_double==true){
+                    pItem_double->setOpacity(50);
+                }
+                else{
+                    pMissile->setScaleX(0.5);
+                    pMissile->setScaleY(0.5);
+                }
+                this->addChild(pMissile,1);
+                check_shoot=true;
+        
+                CCSize minimap_size = pMiniMap->getContentSize();
+                CCPoint minimap_position = pMiniMap->getPosition();
+                SF_vector Missile_pos = Missile.Get_position();
+            
+                pYellowdot=CCSprite::spriteWithFile("Yellow_dot.png");
+                pYellowdot->setOpacity(180);
+                pYellowdot->setPosition(ccp(minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,minimap_position.y-40));
+                this->addChild(pYellowdot,2);
+            
+                //패킷 전송부
+                if(voice_type==RESPONSE_MISSILE){
+                    [PacketManager SendPacket:PROTOCOL_SHOT pos: present_position vel:Shoot_angle];
+                }else if(voice_type==RESPONSE_DOUBLE && check_double==true){
+                    check_double=false;
+                    [PacketManager SendPacket:PROTOCOL_DOUBLE pos: present_position vel:Shoot_angle];
                 }
             }
-            Shoot_power=10+Shoot_power/8;
-            Shoot_angle.x=Shoot_power*cos(present_angle);
-            Shoot_angle.y=Shoot_power*sin(present_angle);
-            
-            pMissile=CCSprite::spriteWithFile("Bomb.png");
-            Missile.Init_Missile(present_position,Shoot_angle,50);
-            pMissile->setPosition(ccp(present_position.x,present_position.y));
-            pMissile->setScaleX(0.5);
-            pMissile->setScaleY(0.5);
-            this->addChild(pMissile,1);
-            check_shoot=true;
-        
-            CCSize minimap_size = pMiniMap->getContentSize();
-            CCPoint minimap_position = pMiniMap->getPosition();
-            SF_vector Missile_pos = Missile.Get_position();
-            
-            pYellowdot=CCSprite::spriteWithFile("Yellow_dot.png");
-            pYellowdot->setOpacity(180);
-            pYellowdot->setPosition(ccp(minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,minimap_position.y-40));
-            this->addChild(pYellowdot,2);
         }
+    }else if(voice_type==RESPONSE_MEDICINE){
+        SF_vector temp;
+        if(player_num==1){
+            Fighter.ADD_HP(50);
+        }else if(player_num==2){
+            Enemy.ADD_HP(50);
+        }
+        [PacketManager SendPacket:PROTOCOL_HEAL pos: temp vel:temp];
+        pItem_Heal->setOpacity(50);
+        if(present_turn==1)
+            present_turn=-1;
+        else if(present_turn==2)
+            present_turn=-2;
     }
 }
 
@@ -477,15 +537,15 @@ void SF_Scene::setting_scene(){
     pItem_double->setPosition(ccp(160,winSize.height-140));
     this->addChild(pItem_double,2);
     
-    pItem_teleport = CCSprite::spriteWithFile("Item_teleport.png");
-    //pItem_double->setScale(0.5);
-    pItem_teleport->setPosition(ccp(240,winSize.height-140));
-    this->addChild(pItem_teleport,2);
-    
     //프레임 수를 세기 위해 초기화
     count_frame=0;
     //미사일 발사 여부 초기화
     check_shoot=false;
+    //bar move init
+    Move_bar=true;
+    //아이템들 초기화
+    check_double=true;
+    check_heal=true;
     
     setIsAccelerometerEnabled(true);
     
@@ -563,7 +623,7 @@ void SF_Scene::Write_Time(){
     if(present_turn==1 || present_turn==2){
         int temp;
         char c[32];
-        temp=10-(int)count_frame;
+        temp=20-(int)count_frame;
         sprintf(c,"%d",temp);
         pTimer->setString(c);
     }else{
@@ -572,13 +632,16 @@ void SF_Scene::Write_Time(){
 }
 
 void SF_Scene::Check_hit(){
-    if(check_shoot==true){
-        if(present_turn == player_num){
+    if(check_shoot==true){  
+        if(present_turn == player_num){                 //맞췄을 경우
             if(player_num==1){
                 if(CCRect::CCRectIntersectsRect(pMissile->boundingBox(), pEnemy->boundingBox())){
                     Enemy.Sub_HP(Missile.Get_Missile_power());
                     check_shoot=false;
                     present_turn=-1;
+                    SF_vector power;
+                    power.x=Missile.Get_Missile_power();
+                    [PacketManager SendPacket:PROTOCOL_HIT pos:Fighter.Get_position() vel:power];
                     this->removeChild(pMissile,true);
                     this->removeChild(pYellowdot, true);
                 }
@@ -587,11 +650,31 @@ void SF_Scene::Check_hit(){
                     Fighter.Sub_HP(Missile.Get_Missile_power());
                     check_shoot=false;
                     present_turn=-2;
+                    SF_vector power;
+                    power.x=Missile.Get_Missile_power();
+                    [PacketManager SendPacket:PROTOCOL_HIT pos:Fighter.Get_position() vel:power];
                     this->removeChild(pMissile,true);
                     this->removeChild(pYellowdot, true);
                 }
             }
         }
+        
+        //통신에 의해 내가 맞을때
+        /*if(present_turn==2 && player_num==1){
+            if(CCRect::CCRectIntersectsRect(pMissile->boundingBox(), pFighter->boundingBox())){
+                Fighter.Sub_HP(Missile.Get_Missile_power());
+                check_shoot=false;
+                this->removeChild(pMissile,true);
+                this->removeChild(pYellowdot, true);
+            }
+        }else if(present_turn==1 && player_num==2){
+            if(CCRect::CCRectIntersectsRect(pMissile->boundingBox(), pEnemy->boundingBox())){
+                Enemy.Sub_HP(Missile.Get_Missile_power());
+                check_shoot=false;
+                this->removeChild(pMissile, true);
+                this->removeChild(pYellowdot, true);
+            }
+        }*/
     }
 }
 
@@ -617,7 +700,7 @@ void SF_Scene::Game_END(){
             // add the sprite as a child to this layer
             this->addChild(wait_backgroud, 0);
         }else{
-            wait_backgroud = CCSprite::spriteWithFile("Lose_Scene.jpg");
+            wait_backgroud = CCSprite::spriteWithFile("Lose_Scene.png");
             // position the sprite on the center of the screen
             wait_backgroud->setScaleX(winSize.width/wait_backgroud->getContentSize().width);
             wait_backgroud->setScaleY(winSize.height/wait_backgroud->getContentSize().height);
@@ -627,7 +710,7 @@ void SF_Scene::Game_END(){
         }
     }else if(player_num==2){
         if(Fighter.Get_HP()>0){
-            wait_backgroud = CCSprite::spriteWithFile("Lose_Scene.jpg");
+            wait_backgroud = CCSprite::spriteWithFile("Lose_Scene.png");
             // position the sprite on the center of the screen
             wait_backgroud->setScaleX(winSize.width/wait_backgroud->getContentSize().width);
             wait_backgroud->setScaleY(winSize.height/wait_backgroud->getContentSize().height);
@@ -753,6 +836,13 @@ void SF_Scene::receiveData(NSData * data)
         case PROTOCOL_START:
             break;
         case PROTOCOL_END:
+            if(present_turn==1)
+                present_turn=-1;
+            else if(present_turn==2)
+                present_turn=-2;
+            check_shoot=false;
+            this->removeChild(pMissile, true);
+            this->removeChild(pYellowdot,true);
             break;
         case PROTOCOL_SYNC:
             if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
@@ -765,7 +855,83 @@ void SF_Scene::receiveData(NSData * data)
             }
             
             break;
+        case PROTOCOL_HIT:
+            this->removeChild(pMissile, true);
+            this->removeChild(pYellowdot, true);
+            check_shoot=false;
+            if(player_num==1){
+                Fighter.Sub_HP(velocity.x);
+            }else if(player_num==2){
+                Enemy.Sub_HP(velocity.x);
+            }
+            if(present_turn==1)
+                present_turn=-1;
+            else if(present_turn==2)
+                present_turn=-2;
+            break;
         case PROTOCOL_SHOT:
+        {
+            check_shoot=true;
+            pMissile=CCSprite::spriteWithFile("Bomb.png");
+            Missile.Init_Missile(position,velocity,50);
+            pMissile->setPosition(ccp(position.x,position.y));
+            pMissile->setScaleX(0.5);
+            pMissile->setScaleY(0.5);
+            this->addChild(pMissile,1);
+            
+            if(player_num==1)
+                Missile.Set_who(2);
+            else
+                Missile.Set_who(2);
+            
+            CCSize minimap_size = pMiniMap->getContentSize();
+            CCPoint minimap_position = pMiniMap->getPosition();
+            SF_vector Missile_pos = Missile.Get_position();
+            
+            pYellowdot=CCSprite::spriteWithFile("Yellow_dot.png");
+            pYellowdot->setOpacity(180);
+            pYellowdot->setPosition(ccp(minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,minimap_position.y-40));
+            this->addChild(pYellowdot,2);
+        }
+            break;
+        case PROTOCOL_DOUBLE:
+        {
+            check_shoot=true;
+            pMissile=CCSprite::spriteWithFile("Bomb.png");
+            Missile.Init_Missile(position,velocity,100);
+            pMissile->setPosition(ccp(position.x,position.y));
+            //pMissile->setScaleX(0.5);
+            //pMissile->setScaleY(0.5);
+            this->addChild(pMissile,1);
+            
+            if(player_num==1)
+                Missile.Set_who(2);
+            else
+                Missile.Set_who(2);
+            
+            CCSize minimap_size = pMiniMap->getContentSize();
+            CCPoint minimap_position = pMiniMap->getPosition();
+            SF_vector Missile_pos = Missile.Get_position();
+            
+            pYellowdot=CCSprite::spriteWithFile("Yellow_dot.png");
+            pYellowdot->setOpacity(180);
+            pYellowdot->setPosition(ccp(minimap_position.x-minimap_size.width/2+Missile_pos.x/(winSize.width*2)*minimap_size.width,minimap_position.y-40));
+            this->addChild(pYellowdot,2);
+        }
+            break;
+        case PROTOCOL_HEAL:
+            if ( [[UIDevice currentDevice].systemVersion floatValue] < 6.0)
+            {
+                Enemy.ADD_HP(50);
+            }
+            else
+            {
+                Fighter.ADD_HP(50);
+            }
+            if(present_turn==1)
+                present_turn=-1;
+            else if(present_turn==2)
+                present_turn=-2;
             break;
     }
     CCLog("receive : %f, %f, %f, %f", position.x, position.y, velocity.x, velocity.y);
